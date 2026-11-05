@@ -1,4 +1,4 @@
-# AgriDistri
+﻿# AgriDistri
 
 Application web de distribution d'intrants agricoles (semences, engrais, pesticides) au Sénégal. Un agriculteur dépose une demande sans créer de compte, un distributeur la valide ou la rejette selon son stock, et un administrateur suit l'ensemble.
 
@@ -74,14 +74,8 @@ login.html                 connexion
 portail-distributeur.html  tableau de bord distributeur
 portail-admin.html         tableau de bord administrateur
 style.css                  styles
-tests/                     tests
+tests/                     script de test de validation (serveur lance requis)
 .env.example               modèle de configuration
-```
-
-## Tests
-
-```powershell
-python -m pytest tests
 ```
 
 ## Contact
