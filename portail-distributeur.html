@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portail Distributeur | AgriDistri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { padding: 0; }
+    .aurora { position:fixed;inset:0;pointer-events:none;z-index:0; }
+    .aurora::before { content:'';position:absolute;width:70vw;height:70vw;top:-30vw;left:-20vw;background:radial-gradient(circle,rgba(0,210,122,0.05) 0%,transparent 65%);animation:drift 22s ease-in-out infinite alternate; }
+    .aurora::after  { content:'';position:absolute;width:40vw;height:40vw;bottom:-5vw;right:-5vw;background:radial-gradient(circle,rgba(0,130,80,0.04) 0%,transparent 65%);animation:drift 28s ease-in-out infinite alternate-reverse; }
+    @keyframes drift { from{transform:translate(0,0) scale(1);}to{transform:translate(3vw,5vw) scale(1.1);} }
+
+    /* Demand cards */
+    .dem-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 1.25rem; padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .dem-card:hover { border-color: rgba(0,210,122,0.2); transform: translateX(2px); }
+    .dem-top { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1rem; }
+    .dem-name { font-weight:700; font-size:1rem; }
+    .dem-contact { font-size:0.78rem; color:rgba(224,240,234,0.45); margin-top:0.2rem; font-family:monospace; }
+
+    .dem-meta {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.75rem; padding: 1rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .dem-field label { display:block;font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(224,240,234,0.3);margin-bottom:0.2rem; }
+    .dem-field span  { font-size:0.85rem;font-weight:500; }
+
+    .dem-actions { display:flex; gap:0.6rem; justify-content:flex-end; }
+
+    .btn-val {
+      background: rgba(0,210,122,0.12); color: #00D27A;
+      border: 1px solid rgba(0,210,122,0.25);
+      padding: 0.5rem 1.1rem; border-radius: 0.625rem;
+      font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; font-family:'Inter',sans-serif;
+      transition: all 0.2s; display:flex;align-items:center;gap:0.35rem;
+    }
+    .btn-val:hover { background: rgba(0,210,122,0.22); box-shadow: 0 4px 16px rgba(0,210,122,0.2); }
+
+    .btn-rej {
+      background: rgba(239,68,68,0.1); color: #EF4444;
+      border: 1px solid rgba(239,68,68,0.2);
+      padding: 0.5rem 1.1rem; border-radius: 0.625rem;
+      font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; font-family:'Inter',sans-serif;
+      transition: all 0.2s; display:flex;align-items:center;gap:0.35rem;
+    }
+    .btn-rej:hover { background: rgba(239,68,68,0.2); }
+
+    /* Stock card */
+    .stock-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 1rem; margin-bottom: 0.75rem;
+      transition: border-color 0.2s;
+    }
+    .stock-item:hover { border-color: rgba(0,210,122,0.15); }
+    .stock-item-left { display:flex;align-items:center;gap:0.875rem; }
+    .stock-item-icon { width:40px;height:40px;border-radius:0.75rem;background:rgba(0,210,122,0.1);display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
+    .stock-item-name { font-weight:700;font-size:0.875rem; }
+    .stock-item-type { font-size:0.72rem;color:rgba(224,240,234,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.1rem; }
+    .stock-qty { font-size:1.5rem;font-weight:800;color:#00D27A;letter-spacing:-0.02em; }
+    .stock-unit { font-size:0.72rem;color:rgba(224,240,234,0.35);margin-top:0.1rem;text-align:right; }
+
+    /* Form inputs */
+    .f-select, .f-input-sm {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0.75rem; padding: 0.7rem 0.875rem;
+      color: #E0F0EA; font-size: 0.875rem;
+      font-family:'Inter',sans-serif; outline:none; width:100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .f-select:focus, .f-input-sm:focus {
+      border-color: #00D27A; box-shadow: 0 0 0 3px rgba(0,210,122,0.1);
+    }
+    .f-select option { background: #071318; }
+
+    .stock-msg {
+      display:none; padding:0.75rem 1rem;
+      border-radius:0.75rem;font-size:0.85rem;
+      border:1px solid; margin-top:0.75rem; align-items:center; gap:0.5rem;
+    }
+    .stock-msg.show { display:flex; }
+    .stock-msg.success { background:rgba(0,210,122,0.08);color:#00D27A;border-color:rgba(0,210,122,0.2); }
+    .stock-msg.error   { background:rgba(239,68,68,0.08);color:#EF4444;border-color:rgba(239,68,68,0.2); }
+
+    .badge-pending { background:rgba(245,166,35,0.12);color:#F5A623;border:1px solid rgba(245,166,35,0.25);display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
+    .badge-pending::before { content:'●';font-size:0.5rem; }
+    .badge-validee { background:rgba(0,210,122,0.12);color:#00D27A;border:1px solid rgba(0,210,122,0.25);display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
+    .badge-validee::before { content:'●';font-size:0.5rem; }
+
+    .empty { text-align:center;padding:3rem;color:rgba(224,240,234,0.3);font-size:0.9rem; }
+    .empty-icon { font-size:2.5rem;display:block;margin-bottom:0.75rem;opacity:0.3; }
+
+    .section-h2 { font-size:1.2rem;font-weight:700;margin-bottom:0.25rem; }
+    .section-sub { font-size:0.8rem;color:rgba(224,240,234,0.4);margin-bottom:1.5rem; }
+  </style>
+</head>
+<body>
+<div class="aurora"></div>
+
+<div class="portal-layout" style="position:relative;z-index:1;">
+  <!-- ── Sidebar ── -->
+  <aside class="portal-sidebar">
+    <div class="sidebar-brand">
+      <img src="agridistri_logo_transparent.png" alt="AgriDistri">
+      <div>
+        <div class="sidebar-brand-name">AgriDistri</div>
+        <div class="sidebar-brand-role">Distributeur</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Navigation</div>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link active" onclick="switchSection('demandes')" id="nav-demandes">
+          <span class="nav-icon">📋</span> Demandes
+          <span class="sidebar-badge" id="badge-pending">0</span>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" onclick="switchSection('stocks')" id="nav-stocks">
+          <span class="nav-icon">📦</span> Mes Stocks
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" onclick="switchSection('historique')" id="nav-historique">
+          <span class="nav-icon">✅</span> Historique
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-section-label">Zone</div>
+    <ul class="sidebar-nav">
+      <li>
+        <div style="padding:0.6rem 0.875rem;font-size:0.82rem;color:rgba(224,240,234,0.45);">
+          <div style="font-weight:600;color:#00D27A;" id="user-region-label">—</div>
+          <div style="font-size:0.72rem;margin-top:0.15rem;">Région assignée</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="sidebar-section-label">Liens</div>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" href="index.html">
+          <span class="nav-icon">🏠</span> Accueil
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-card">
+        <div class="sidebar-avatar" id="user-avatar">D</div>
+        <div>
+          <div class="sidebar-user-name" id="user-name">Chargement…</div>
+          <div class="sidebar-user-role" id="user-region">Distributeur</div>
+        </div>
+      </div>
+      <button class="sidebar-logout" onclick="logout()">⎋ Déconnexion</button>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="portal-main">
+    <div class="portal-topbar">
+      <div>
+        <div class="topbar-title" id="topbar-title">Demandes en attente</div>
+        <div class="topbar-subtitle" id="topbar-sub">Validez ou rejetez les demandes de votre zone</div>
+      </div>
+      <div class="topbar-actions">
+        <span id="topbar-clock" style="font-size:0.78rem;color:rgba(224,240,234,0.4);"></span>
+        <button onclick="refreshAll()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#E0F0EA;padding:0.45rem 0.875rem;border-radius:0.625rem;font-size:0.8rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(0,210,122,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+          ↻ Actualiser
+        </button>
+      </div>
+    </div>
+
+    <div class="portal-content">
+
+      <!-- KPI row -->
+      <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
+        <div class="kpi-card kpi-warning">
+          <div class="kpi-label">En attente</div>
+          <div class="kpi-value" id="count-pending">—</div>
+          <div class="kpi-sub">À traiter</div>
+        </div>
+        <div class="kpi-card kpi-success">
+          <div class="kpi-label">Validées</div>
+          <div class="kpi-value" id="count-validated">—</div>
+          <div class="kpi-sub">Ce mois</div>
+        </div>
+      </div>
+
+      <!-- ─── Demandes ─── -->
+      <section id="section-demandes">
+        <div class="section-h2">Demandes en attente</div>
+        <div class="section-sub">Demandes assignées à votre zone — à traiter rapidement</div>
+        <div id="demandes-list">
+          <div class="empty"><span class="empty-icon">⏳</span>Chargement…</div>
+        </div>
+      </section>
+
+      <!-- ─── Stocks ─── -->
+      <section id="section-stocks" style="display:none;">
+        <div class="section-h2">Vos stocks disponibles</div>
+        <div class="section-sub">Intrants assignés à votre zone de distribution</div>
+        <div id="stocks-grid" style="margin-bottom:1.5rem;">
+          <div class="empty"><span class="empty-icon">📦</span>Chargement…</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title" style="margin-bottom:1.5rem;"><div class="panel-title-icon">✏️</div>Modifier une quantité</div>
+          <form id="update-stock-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+              <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                <label style="font-size:0.775rem;font-weight:600;color:rgba(224,240,234,0.5);text-transform:uppercase;letter-spacing:0.08em;">Intrant</label>
+                <select class="f-select" id="stock-select" required>
+                  <option value="">-- Sélectionner --</option>
+                </select>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                <label style="font-size:0.775rem;font-weight:600;color:rgba(224,240,234,0.5);text-transform:uppercase;letter-spacing:0.08em;">Action</label>
+                <select class="f-select" id="stock-action" required>
+                  <option value="">-- Sélectionner --</option>
+                  <option value="add">➕ Ajouter du stock</option>
+                  <option value="remove">➖ Retirer du stock</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-end;">
+              <div style="flex:1;display:flex;flex-direction:column;gap:0.4rem;">
+                <label style="font-size:0.775rem;font-weight:600;color:rgba(224,240,234,0.5);text-transform:uppercase;letter-spacing:0.08em;">Quantité</label>
+                <input class="f-input-sm" type="number" id="stock-quantity" step="0.1" min="0.1" placeholder="Ex: 50" required>
+              </div>
+              <button type="submit" style="background:#00D27A;color:#030B0D;border:none;border-radius:0.75rem;padding:0.7rem 1.5rem;font-weight:700;font-size:0.875rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='#00F090'" onmouseout="this.style.background='#00D27A'">
+                Mettre à jour
+              </button>
+            </div>
+            <div class="stock-msg" id="stock-message"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ─── Historique ─── -->
+      <section id="section-historique" style="display:none;">
+        <div class="section-h2">Historique des validations</div>
+        <div class="section-sub">Demandes validées par votre portail</div>
+        <div id="validees-list">
+          <div class="empty"><span class="empty-icon">✅</span>Chargement…</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const API_URL = '/api';
+  let currentUser = null;
+
+  // ── Session ─────────────────────────────────────────────────────
+  async function checkSession() {
+    try {
+      const res = await fetch(`${API_URL}/me`, { credentials: 'same-origin' });
+      if (!res.ok) { window.location.href = 'login.html'; return; }
+      currentUser = await res.json();
+      if (currentUser.role !== 'distributeur' && currentUser.role !== 'admin') {
+        alert('Accès refusé.'); window.location.href = 'login.html'; return;
+      }
+      document.getElementById('user-name').textContent = currentUser.nom;
+      document.getElementById('user-region').textContent = currentUser.region || 'Distributeur';
+      document.getElementById('user-region-label').textContent = currentUser.region || '—';
+      document.getElementById('user-avatar').textContent = (currentUser.nom || 'D')[0].toUpperCase();
+    } catch (_) { window.location.href = 'login.html'; }
+  }
+
+  async function logout() {
+    try { await fetch(`${API_URL}/logout`, { method: 'POST', credentials: 'same-origin' }); } finally { window.location.href = 'login.html'; }
+  }
+
+  // ── Navigation ───────────────────────────────────────────────────
+  const SECTIONS = { demandes: 'Demandes en attente', stocks: 'Mes Stocks', historique: 'Historique' };
+  const SUBS = { demandes: 'Validez ou rejetez les demandes de votre zone', stocks: 'Intrants disponibles dans votre zone', historique: 'Demandes traitées par votre portail' };
+
+  function switchSection(name) {
+    ['demandes', 'stocks', 'historique'].forEach(s => {
+      document.getElementById(`section-${s}`).style.display = s === name ? 'block' : 'none';
+      document.getElementById(`nav-${s}`).classList.toggle('active', s === name);
+    });
+    document.getElementById('topbar-title').textContent = SECTIONS[name];
+    document.getElementById('topbar-sub').textContent   = SUBS[name];
+    if (name === 'stocks')     chargerStocks();
+    if (name === 'historique') chargerDemandesValidees();
+  }
+
+  // ── Demandes en attente ──────────────────────────────────────────
+  async function chargerDemandes() {
+    if (!currentUser) return;
+    try {
+      const res = await fetch(`${API_URL}/demandes-distributeur?statut=EN_ATTENTE&distributeur_id=${currentUser.id}`, { credentials: 'same-origin' });
+      if (res.status === 401 || res.status === 422) { window.location.href = 'login.html'; return; }
+      const demandes = await res.json();
+      document.getElementById('count-pending').textContent = demandes.length;
+      document.getElementById('badge-pending').textContent = demandes.length;
+      const container = document.getElementById('demandes-list');
+      if (!demandes.length) {
+        container.innerHTML = '<div class="empty"><span class="empty-icon">🎉</span>Aucune demande en attente. Bon travail !</div>'; return;
+      }
+      container.innerHTML = demandes.map(d => `
+        <div class="dem-card">
+          <div class="dem-top">
+            <div>
+              <div class="dem-name">${d.nom} ${d.prenom}</div>
+              <div class="dem-contact">📱 ${d.contact}</div>
+            </div>
+            <span class="badge-pending">En attente</span>
+          </div>
+          <div class="dem-meta">
+            <div class="dem-field"><label>Intrant</label><span>${d.stock_nom}</span></div>
+            <div class="dem-field"><label>Quantité</label><span style="color:#00D27A;font-weight:700;">${d.quantite} ${d.stock_unite}</span></div>
+            <div class="dem-field"><label>Région</label><span>${d.region}</span></div>
+            <div class="dem-field"><label>Date</label><span>${new Date(d.date_demande).toLocaleDateString('fr-FR')}</span></div>
+            ${d.type_piece ? `<div class="dem-field"><label>Pièce</label><span>${d.type_piece}</span></div>` : ''}
+          </div>
+          <div class="dem-actions">
+            <button class="btn-rej" onclick="rejeterDemande(${d.id})">✕ Rejeter</button>
+            <button class="btn-val" onclick="validerDemande(${d.id}, '${d.contact}')">✓ Valider</button>
+          </div>
+        </div>
+      `).join('');
+    } catch (e) { console.error('Erreur demandes:', e); }
+  }
+
+  // ── Actions ──────────────────────────────────────────────────────
+  async function validerDemande(id, contact) {
+    if (!confirm('Confirmer la validation de cette demande ?')) return;
+    try {
+      const res = await fetch(`${API_URL}/demandes/${id}/valider`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ distributeur_id: currentUser.id, contact })
+      });
+      if (res.ok) { chargerDemandes(); chargerDemandesValidees(); chargerStocks(); }
+      else { const d = await res.json().catch(()=>({})); alert('❌ ' + (d.error || 'Erreur lors de la validation')); }
+    } catch (e) { console.error(e); }
+  }
+
+  async function rejeterDemande(id) {
+    if (!confirm('Confirmer le rejet de cette demande ?')) return;
+    try {
+      const res = await fetch(`${API_URL}/demandes/${id}/rejeter`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin'
+      });
+      if (res.ok) chargerDemandes();
+      else alert('Erreur lors du rejet');
+    } catch (e) { console.error(e); }
+  }
+
+  // ── Stocks ───────────────────────────────────────────────────────
+  async function chargerStocks() {
+    if (!currentUser) return;
+    try {
+      const res = await fetch(`${API_URL}/distributeurs/${currentUser.id}/stocks`, { credentials: 'same-origin' });
+      const stocks = await res.json();
+      const icons = { 'Semence':'🌱', 'Engrais':'🧪', 'Urée':'🔬', 'Pesticide':'🛡️' };
+      const getIcon = n => Object.entries(icons).find(([k]) => n.includes(k))?.[1] || '📦';
+      document.getElementById('stocks-grid').innerHTML = stocks.length
+        ? stocks.map(s => `
+          <div class="stock-item">
+            <div class="stock-item-left">
+              <div class="stock-item-icon">${getIcon(s.nom)}</div>
+              <div>
+                <div class="stock-item-name">${s.nom}</div>
+                <div class="stock-item-type">${s.type || 'Intrant'}</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div class="stock-qty">${s.quantite}</div>
+              <div class="stock-unit">${s.unite}</div>
+            </div>
+          </div>
+        `).join('')
+        : '<div class="empty"><span class="empty-icon">📦</span>Aucun stock assigné</div>';
+
+      document.getElementById('stock-select').innerHTML = '<option value="">-- Sélectionner --</option>' +
+        stocks.map(s => `<option value="${s.id}">${s.nom} (${s.quantite} ${s.unite})</option>`).join('');
+    } catch (e) { console.error(e); }
+  }
+
+  // ── Historique ───────────────────────────────────────────────────
+  async function chargerDemandesValidees() {
+    if (!currentUser) return;
+    try {
+      const res = await fetch(`${API_URL}/demandes-distributeur?statut=VALIDEE&distributeur_id=${currentUser.id}`, { credentials: 'same-origin' });
+      const demandes = await res.json();
+      document.getElementById('count-validated').textContent = demandes.length;
+      const container = document.getElementById('validees-list');
+      if (!demandes.length) { container.innerHTML = '<div class="empty"><span class="empty-icon">📋</span>Aucune demande validée</div>'; return; }
+      container.innerHTML = demandes.map(d => `
+        <div class="dem-card">
+          <div class="dem-top">
+            <div>
+              <div class="dem-name">${d.nom} ${d.prenom}</div>
+              <div class="dem-contact">📱 ${d.contact}</div>
+            </div>
+            <span class="badge-validee">✓ Validée</span>
+          </div>
+          <div class="dem-meta">
+            <div class="dem-field"><label>Intrant</label><span>${d.stock_nom}</span></div>
+            <div class="dem-field"><label>Quantité livrée</label><span style="color:#00D27A;font-weight:700;">${d.quantite} ${d.stock_unite}</span></div>
+            ${d.date_validation ? `<div class="dem-field"><label>Validée le</label><span>${new Date(d.date_validation).toLocaleDateString('fr-FR')}</span></div>` : ''}
+          </div>
+        </div>
+      `).join('');
+    } catch (e) { console.error(e); }
+  }
+
+  // ── Stock form ───────────────────────────────────────────────────
+  document.getElementById('update-stock-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const stockId  = document.getElementById('stock-select').value;
+    const action   = document.getElementById('stock-action').value;
+    const quantity = parseFloat(document.getElementById('stock-quantity').value);
+    const msg = document.getElementById('stock-message');
+    msg.className = 'stock-msg'; msg.textContent = '';
+    try {
+      const res = await fetch(`${API_URL}/distributeurs/${currentUser.id}/stocks/${stockId}/${action}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ quantite: quantity })
+      });
+      if (res.ok) {
+        msg.className = 'stock-msg success show'; msg.textContent = '✅ Stock mis à jour avec succès !';
+        document.getElementById('update-stock-form').reset(); chargerStocks();
+      } else {
+        const d = await res.json().catch(()=>({}));
+        msg.className = 'stock-msg error show'; msg.textContent = '❌ ' + (d.error || 'Erreur lors de la mise à jour');
+      }
+    } catch (_) { msg.className = 'stock-msg error show'; msg.textContent = '❌ Erreur de connexion'; }
+  });
+
+  // ── Utils ─────────────────────────────────────────────────────────
+  function refreshAll() { chargerDemandes(); chargerStocks(); chargerDemandesValidees(); }
+
+  function updateClock() {
+    document.getElementById('topbar-clock').textContent = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  }
+  setInterval(updateClock, 1000); updateClock();
+
+  // ── Init ─────────────────────────────────────────────────────────
+  checkSession().then(() => {
+    if (currentUser) {
+      chargerDemandes();
+      chargerStocks();
+      chargerDemandesValidees();
+      setInterval(() => { chargerDemandes(); chargerDemandesValidees(); }, 30000);
+    }
+  });
+</script>
+</body>
+</html>

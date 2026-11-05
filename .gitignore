@@ -1,0 +1,7 @@
+node_modules/
+*.db
+.env
+test_stock.js
+test_integrity.js
+.venv/
+__pycache__/

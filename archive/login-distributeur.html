@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Admin / Distributeur | AgriDistri</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-gradient-dark login-page">
+    <div class="auth-container">
+        <div class="auth-grid animate-fade-in">
+            <aside class="auth-sidebar">
+                <div class="auth-sidebar__header">
+                    <div class="logo">AgriDistri</div>
+                    <h1>Accès Admin / Distributeur</h1>
+                    <p>Authentifiez-vous ici en tant qu’administrateur ou distributeur pour accéder à votre espace dédié.</p>
+                </div>
+                <div class="sidebar-role-cards">
+                    <article class="role-card role-card--admin">
+                        <h3>Admin</h3>
+                        <p>Supervision globale, rapports, gestion des distributeurs et suivi des demandes.</p>
+                    </article>
+                    <article class="role-card role-card--distributor">
+                        <h3>Distributeur</h3>
+                        <p>Validation des demandes, mise à jour des stocks et gestion des livraisons.</p>
+                    </article>
+                </div>
+                <div class="auth-note">Page d’accès partagée pour administrateurs et distributeurs autorisés.</div>
+            </aside>
+
+            <section class="auth-panel">
+                <div class="login-header">
+                    <span class="eyebrow">Connexion</span>
+                    <h2>Connexion Admin / Distributeur</h2>
+                    <p class="text-muted-alt">Utilisez vos identifiants professionnels pour accéder à votre espace.</p>
+                </div>
+
+                <form id="login-form" class="auth-form">
+                    <div class="form-group text-left">
+                        <label for="username">Identifiant</label>
+                        <input type="text" id="username" placeholder="Votre identifiant" required>
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" id="login-btn">Se connecter</button>
+                </form>
+                <div id="login-message" class="mt-1 small-text"></div>
+                <p class="small-text text-muted-alt mt-2">Besoin d’aide ? Contactez le support pour obtenir vos identifiants.</p>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const msg = document.getElementById('login-message');
+            const btn = document.getElementById('login-btn');
+
+            btn.disabled = true;
+            btn.innerText = 'Vérification...';
+
+            try {
+                const response = await fetch('/api/login-distributeur', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('distributeur', JSON.stringify(result.user));
+                    msg.style.color = 'green';
+                    msg.innerText = '✅ Connexion réussie. Redirection...';
+                    if (result.user.role === 'admin') {
+                        setTimeout(() => window.location.href = 'portail-admin.html', 1000);
+                    } else {
+                        setTimeout(() => window.location.href = 'portail-distributeur.html', 1000);
+                    }
+                } else {
+                    msg.style.color = 'red';
+                    msg.innerText = '❌ ' + (result.error || 'Échec de connexion');
+                    btn.disabled = false;
+                    btn.innerText = 'Se Connecter';
+                }
+            } catch (error) {
+                msg.style.color = 'red';
+                msg.innerText = '❌ Erreur serveur';
+                btn.disabled = false;
+                btn.innerText = 'Se Connecter';
+            }
+        });
+    </script>
+</body>
+</html>

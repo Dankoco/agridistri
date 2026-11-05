@@ -1,0 +1,8 @@
+Flask==3.0.0
+flask-cors==4.0.0
+Werkzeug==3.0.0
+python-dotenv==1.0.0
+Flask-JWT-Extended==4.7.4
+Flask-Limiter==4.1.1
+Flask-Talisman==1.1.0
+PyJWT==2.13.0

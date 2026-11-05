@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion | AgriDistri</title>
+  <meta name="description" content="Connexion sécurisée au portail AgriDistri pour administrateurs et distributeurs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { padding: 0; background: #030B0D; }
+
+    /* ── Login Split Layout ── */
+    .login-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      position: relative;
+    }
+    @media (max-width: 900px) {
+      .login-shell { grid-template-columns: 1fr; }
+      .login-side  { display: none; }
+    }
+
+    /* ── Left Side ── */
+    .login-side {
+      background: #071318;
+      border-right: 1px solid rgba(255,255,255,0.05);
+      padding: 3rem 3.5rem;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+    .login-side::before {
+      content: '';
+      position: absolute;
+      width: 70%; height: 70%;
+      bottom: -20%; left: -15%;
+      background: radial-gradient(circle, rgba(0,210,122,0.09) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .login-side::after {
+      content: '';
+      position: absolute;
+      width: 40%; height: 40%;
+      top: 5%; right: -5%;
+      background: radial-gradient(circle, rgba(0,130,80,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .side-brand {
+      display: flex; align-items: center; gap: 1rem;
+      position: relative; z-index: 1;
+    }
+    .side-brand img { height: 38px; filter: drop-shadow(0 0 10px rgba(0,210,122,0.5)); }
+    .side-brand-name { font-size: 1.2rem; font-weight: 800; }
+    .side-brand-tag  { font-size: 0.72rem; color: rgba(224,240,234,0.5); margin-top: 0.15rem; }
+
+    .side-hero {
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: center; padding: 2rem 0;
+      position: relative; z-index: 1;
+    }
+    .side-tagline {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800; letter-spacing: -0.04em;
+      line-height: 1.2; margin-bottom: 1rem;
+    }
+    .side-tagline .vert { color: #00D27A; }
+    .side-sub {
+      color: rgba(224,240,234,0.5); font-size: 0.95rem;
+      line-height: 1.75; max-width: 420px;
+    }
+
+    .side-roles { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2.5rem; }
+    .role-card {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 1rem;
+      transition: border-color 0.2s;
+    }
+    .role-card:hover { border-color: rgba(0,210,122,0.2); }
+    .role-icon {
+      width: 42px; height: 42px; border-radius: 0.875rem;
+      background: rgba(0,210,122,0.1);
+      border: 1px solid rgba(0,210,122,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; flex-shrink: 0;
+    }
+    .role-name { font-size: 0.9rem; font-weight: 700; }
+    .role-desc { font-size: 0.775rem; color: rgba(224,240,234,0.45); margin-top: 0.1rem; }
+
+    .side-footer {
+      font-size: 0.775rem; color: rgba(224,240,234,0.3);
+      position: relative; z-index: 1;
+    }
+
+    /* ── Right side / Form ── */
+    .login-form-side {
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2.5rem; min-height: 100vh;
+    }
+    .login-box { width: 100%; max-width: 420px; }
+
+    .lb-back {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: rgba(224,240,234,0.4); font-size: 0.82rem;
+      margin-bottom: 2rem; cursor: pointer;
+      transition: color 0.2s;
+    }
+    .lb-back:hover { color: #E0F0EA; }
+
+    .lb-eyebrow {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: #00D27A; margin-bottom: 0.75rem;
+    }
+    .lb-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.4rem; }
+    .lb-sub   { color: rgba(224,240,234,0.5); font-size: 0.9rem; margin-bottom: 2.25rem; }
+
+    .form-field { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.1rem; }
+    .fl-label {
+      font-size: 0.775rem; font-weight: 600;
+      color: rgba(224,240,234,0.6);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .fl-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0.875rem;
+      padding: 0.875rem 1.1rem;
+      color: #E0F0EA; font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      outline: none; width: 100%;
+    }
+    .fl-input::placeholder { color: rgba(224,240,234,0.25); }
+    .fl-input:focus {
+      border-color: #00D27A;
+      box-shadow: 0 0 0 3px rgba(0,210,122,0.12);
+      background: rgba(0,210,122,0.04);
+    }
+    .fl-input.error { border-color: #EF4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+
+    .btn-submit {
+      width: 100%; padding: 0.95rem;
+      background: #00D27A; color: #030B0D;
+      border: none; border-radius: 0.875rem;
+      font-size: 0.95rem; font-weight: 800;
+      cursor: pointer; margin-top: 0.25rem;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-submit:hover:not(:disabled) {
+      background: #00F090;
+      box-shadow: 0 4px 24px rgba(0,210,122,0.4);
+      transform: translateY(-1px);
+    }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .login-alert {
+      display: none; padding: 0.875rem 1.1rem;
+      border-radius: 0.875rem; font-size: 0.875rem;
+      align-items: flex-start; gap: 0.6rem;
+      margin-top: 1rem; border: 1px solid;
+      animation: slideIn 0.3s ease;
+    }
+    .login-alert.show { display: flex; }
+    .login-alert.error {
+      background: rgba(239,68,68,0.08); color: #EF4444;
+      border-color: rgba(239,68,68,0.2);
+    }
+    .login-alert.success {
+      background: rgba(0,210,122,0.08); color: #00D27A;
+      border-color: rgba(0,210,122,0.2);
+    }
+
+    .rate-info {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem; color: rgba(224,240,234,0.3);
+      margin-top: 1.25rem; justify-content: center;
+    }
+    .rate-dot { width: 6px; height: 6px; background: #00D27A; border-radius: 50%; opacity: 0.6; }
+
+    .lb-footer {
+      margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: center;
+    }
+    .lb-footer a {
+      color: #00D27A; font-size: 0.875rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .lb-footer a:hover { color: #00F090; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(3,11,13,0.3);
+      border-top-color: #030B0D;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-shell">
+    <!-- Left Branding Side -->
+    <aside class="login-side">
+      <div class="side-brand">
+        <img src="agridistri_logo_transparent.png" alt="AgriDistri">
+        <div>
+          <div class="side-brand-name">AgriDistri</div>
+          <div class="side-brand-tag">Distribution d'intrants agricoles</div>
+        </div>
+      </div>
+
+      <div class="side-hero">
+        <h2 class="side-tagline">
+          Votre tableau de bord<br>
+          <span class="vert">vous attend</span>
+        </h2>
+        <p class="side-sub">
+          Gérez vos demandes, vos stocks et vos opérations depuis un portail sécurisé de niveau enterprise.
+        </p>
+        <div class="side-roles">
+          <div class="role-card">
+            <div class="role-icon">⚙️</div>
+            <div>
+              <div class="role-name">Administrateur</div>
+              <div class="role-desc">Statistiques globales, gestion utilisateurs, audit logs</div>
+            </div>
+          </div>
+          <div class="role-card">
+            <div class="role-icon">🚚</div>
+            <div>
+              <div class="role-name">Distributeur</div>
+              <div class="role-desc">Validation des demandes, gestion des stocks régionaux</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-footer">
+        🔒 Connexion protégée par JWT & HttpOnly Cookies
+      </div>
+    </aside>
+
+    <!-- Right Form Side -->
+    <main class="login-form-side">
+      <div class="login-box">
+        <a class="lb-back" href="index.html">← Retour à l'accueil</a>
+
+        <div class="lb-eyebrow">Espace professionnel</div>
+        <h1 class="lb-title">Connexion</h1>
+        <p class="lb-sub">Entrez vos identifiants pour accéder à votre portail.</p>
+
+        <form id="login-form" autocomplete="on">
+          <div class="form-field">
+            <label class="fl-label" for="username">Identifiant</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="fl-input"
+              placeholder="admin ou distributeur1"
+              autocomplete="username"
+              required
+            >
+          </div>
+          <div class="form-field">
+            <label class="fl-label" for="password">Mot de passe</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="fl-input"
+              placeholder="••••••••••••••••"
+              autocomplete="current-password"
+              required
+            >
+          </div>
+
+          <button type="submit" class="btn-submit" id="submit-btn">
+            <span id="btn-text">Accéder à mon portail</span>
+            <span id="btn-spinner" class="spinner" style="display:none;"></span>
+          </button>
+
+          <div class="login-alert" id="login-alert"></div>
+
+          <div class="rate-info">
+            <div class="rate-dot"></div>
+            Connexion limitée à 5 tentatives / 15 minutes par IP
+          </div>
+        </form>
+
+        <div class="lb-footer">
+          <a href="beneficiaire-demande.html">
+            🌾 Vous êtes agriculteur ? Portail bénéficiaire →
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_URL = '/api';
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const btn     = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const spinner = document.getElementById('btn-spinner');
+      const alert   = document.getElementById('login-alert');
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      // Reset
+      alert.className = 'login-alert';
+      alert.textContent = '';
+      btn.disabled = true;
+      btnText.textContent = 'Vérification…';
+      spinner.style.display = 'inline-block';
+
+      try {
+        const res = await fetch(`${API_URL}/login-distributeur`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert.className = 'login-alert success show';
+          alert.textContent = `✅ Bienvenue, ${data.nom || username} ! Redirection…`;
+          btnText.textContent = 'Connecté !';
+
+          setTimeout(() => {
+            if (data.role === 'admin') {
+              window.location.href = 'portail-admin.html';
+            } else {
+              window.location.href = 'portail-distributeur.html';
+            }
+          }, 800);
+        } else {
+          alert.className = 'login-alert error show';
+          alert.textContent = '⚠️ ' + (data.error || 'Identifiants incorrects.');
+          document.getElementById('password').classList.add('error');
+          btn.disabled = false;
+          btnText.textContent = 'Accéder à mon portail';
+          spinner.style.display = 'none';
+        }
+      } catch (_) {
+        alert.className = 'login-alert error show';
+        alert.textContent = '⚠️ Erreur de connexion au serveur. Veuillez réessayer.';
+        btn.disabled = false;
+        btnText.textContent = 'Accéder à mon portail';
+        spinner.style.display = 'none';
+      }
+    });
+
+    // Clear error state on input
+    document.getElementById('password').addEventListener('input', () => {
+      document.getElementById('password').classList.remove('error');
+    });
+
+    // Already logged in?
+    fetch(`${API_URL}/me`, { credentials: 'same-origin' }).then(r => {
+      if (r.ok) return r.json();
+    }).then(user => {
+      if (user) {
+        window.location.href = user.role === 'admin'
+          ? 'portail-admin.html' : 'portail-distributeur.html';
+      }
+    }).catch(() => {});
+  </script>
+</body>
+</html>

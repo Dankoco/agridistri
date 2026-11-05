@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin | AgriDistri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { padding: 0; }
+    .aurora { position:fixed;inset:0;pointer-events:none;z-index:0; }
+    .aurora::before { content:'';position:absolute;width:70vw;height:70vw;top:-30vw;left:-20vw;background:radial-gradient(circle,rgba(0,210,122,0.05) 0%,transparent 65%);animation:drift 22s ease-in-out infinite alternate; }
+    .aurora::after  { content:'';position:absolute;width:40vw;height:40vw;bottom:-5vw;right:-5vw;background:radial-gradient(circle,rgba(0,130,80,0.04) 0%,transparent 65%);animation:drift 28s ease-in-out infinite alternate-reverse; }
+    @keyframes drift { from{transform:translate(0,0) scale(1);}to{transform:translate(3vw,5vw) scale(1.1);} }
+
+    /* Sidebar override for admin (violet accent) */
+    .sidebar-nav-link.active { background: rgba(124,58,237,0.12); color: #A78BFA; border-color: rgba(124,58,237,0.25); }
+    .sidebar-badge { background: #7C3AED; }
+    .kpi-card.kpi-violet { --kpi-color: #A78BFA; }
+
+    /* Filter bar */
+    .filter-select {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 0.625rem; padding: 0.55rem 0.875rem;
+      color: #E0F0EA; font-size: 0.85rem; outline: none;
+      cursor: pointer; transition: border-color 0.2s; font-family:'Inter',sans-serif;
+    }
+    .filter-select:focus { border-color: #00D27A; }
+    .filter-select option { background: #071318; }
+
+    /* Custom table */
+    .data-table { font-size: 0.83rem; }
+    .data-table th { font-size: 0.67rem; }
+    .data-table td { padding: 0.75rem 0.875rem; }
+
+    .audit-item {
+      display: flex; gap: 1rem; padding: 0.875rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.8rem;
+    }
+    .audit-item:last-child { border-bottom: none; }
+    .audit-time { color: rgba(224,240,234,0.35); min-width: 140px; }
+    .audit-action { color: #00D27A; font-weight: 600; min-width: 130px; }
+    .audit-user   { color: rgba(224,240,234,0.7); }
+    .audit-ip     { color: rgba(224,240,234,0.35); font-family: monospace; font-size: 0.75rem; }
+
+    .section-header { margin-bottom: 1.5rem; }
+    .section-h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .section-sub { font-size: 0.8rem; color: rgba(224,240,234,0.45); }
+  </style>
+</head>
+<body>
+<div class="aurora"></div>
+
+<div class="portal-layout" style="position:relative;z-index:1;">
+  <!-- ── Sidebar ── -->
+  <aside class="portal-sidebar">
+    <div class="sidebar-brand">
+      <img src="agridistri_logo_transparent.png" alt="AgriDistri">
+      <div>
+        <div class="sidebar-brand-name">AgriDistri</div>
+        <div class="sidebar-brand-role">Administration</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Navigation</div>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link active" onclick="switchSection('dashboard')" id="nav-dashboard">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" onclick="switchSection('demandes')" id="nav-demandes">
+          <span class="nav-icon">📋</span> Suivi Demandes
+          <span class="sidebar-badge" id="badge-attente">0</span>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" onclick="switchSection('stocks')" id="nav-stocks">
+          <span class="nav-icon">📦</span> Inventaire
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" onclick="switchSection('utilisateurs')" id="nav-utilisateurs">
+          <span class="nav-icon">👥</span> Utilisateurs
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" onclick="switchSection('rapports')" id="nav-rapports">
+          <span class="nav-icon">📈</span> Rapports
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" onclick="switchSection('audit')" id="nav-audit">
+          <span class="nav-icon">🔍</span> Journal Audit
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-section-label">Liens</div>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a class="sidebar-nav-link" href="index.html">
+          <span class="nav-icon">🏠</span> Accueil
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-card">
+        <div class="sidebar-avatar" id="user-avatar">A</div>
+        <div>
+          <div class="sidebar-user-name" id="user-name">Chargement…</div>
+          <div class="sidebar-user-role">Administrateur</div>
+        </div>
+      </div>
+      <button class="sidebar-logout" onclick="logout()">
+        ⎋ Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="portal-main">
+    <div class="portal-topbar">
+      <div>
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-subtitle" id="topbar-sub">Vue d'ensemble de la plateforme</div>
+      </div>
+      <div class="topbar-actions">
+        <span id="topbar-time" style="font-size:0.78rem;color:rgba(224,240,234,0.4);"></span>
+        <button onclick="refreshAll()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#E0F0EA;padding:0.45rem 0.875rem;border-radius:0.625rem;font-size:0.8rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(0,210,122,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+          ↻ Actualiser
+        </button>
+      </div>
+    </div>
+
+    <div class="portal-content">
+
+      <!-- ─── Dashboard ─── -->
+      <section id="section-dashboard">
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-default">
+            <div class="kpi-label">Total Demandes</div>
+            <div class="kpi-value" id="stat-total-demandes">—</div>
+            <div class="kpi-sub">Toutes périodes</div>
+          </div>
+          <div class="kpi-card kpi-warning">
+            <div class="kpi-label">En Attente</div>
+            <div class="kpi-value" id="stat-attente">—</div>
+            <div class="kpi-sub">À traiter</div>
+          </div>
+          <div class="kpi-card kpi-success">
+            <div class="kpi-label">Validées</div>
+            <div class="kpi-value" id="stat-validees">—</div>
+            <div class="kpi-sub">Traitées avec succès</div>
+          </div>
+          <div class="kpi-card kpi-danger">
+            <div class="kpi-label">Rejetées</div>
+            <div class="kpi-value" id="stat-rejetees">—</div>
+            <div class="kpi-sub">Non validées</div>
+          </div>
+          <div class="kpi-card kpi-info">
+            <div class="kpi-label">Agriculteurs</div>
+            <div class="kpi-value" id="stat-agriculteurs">—</div>
+            <div class="kpi-sub">Enregistrés</div>
+          </div>
+          <div class="kpi-card kpi-violet">
+            <div class="kpi-label">Distributeurs</div>
+            <div class="kpi-value" id="stat-distributeurs">—</div>
+            <div class="kpi-sub">Actifs</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;" class="responsive-2col">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><div class="panel-title-icon">📋</div>Dernières demandes</div>
+            </div>
+            <div id="dash-recent-demandes">
+              <div style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Chargement…</div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><div class="panel-title-icon">📦</div>Stocks globaux</div>
+            </div>
+            <div id="dash-stocks">
+              <div style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Chargement…</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Suivi Demandes ─── -->
+      <section id="section-demandes" style="display:none;">
+        <div class="section-header">
+          <div class="section-h2">Suivi de toutes les demandes</div>
+          <div class="section-sub">Filtrez et suivez l'état de chaque demande en temps réel</div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+              <select class="filter-select" id="filter-status" onchange="filtrerDemandes()">
+                <option value="">Tous les statuts</option>
+                <option value="EN_ATTENTE">En Attente</option>
+                <option value="VALIDEE">Validée</option>
+                <option value="REJETEE">Rejetée</option>
+              </select>
+              <select class="filter-select" id="filter-region" onchange="filtrerDemandes()">
+                <option value="">Toutes les régions</option>
+                <optgroup label="Zone Ouest">
+                  <option value="Dakar">Dakar</option><option value="Pikine">Pikine</option>
+                  <option value="Guédiawaye">Guédiawaye</option><option value="Rufisque">Rufisque</option>
+                  <option value="Thiès">Thiès</option><option value="Mbour">Mbour</option>
+                  <option value="Kaolack">Kaolack</option><option value="Saint-Louis">Saint-Louis</option>
+                  <option value="Louga">Louga</option><option value="Diourbel">Diourbel</option>
+                </optgroup>
+                <optgroup label="Zone Est">
+                  <option value="Tambacounda">Tambacounda</option><option value="Kedougou">Kedougou</option>
+                  <option value="Kolda">Kolda</option><option value="Sédhiou">Sédhiou</option>
+                  <option value="Matam">Matam</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Bénéficiaire</th>
+                  <th>Contact</th>
+                  <th>Intrant</th>
+                  <th>Qté</th>
+                  <th>Région</th>
+                  <th>Distributeur</th>
+                  <th>Statut</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="demandes-tbody">
+                <tr><td colspan="8" style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Chargement…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Inventaire ─── -->
+      <section id="section-stocks" style="display:none;">
+        <div class="section-header">
+          <div class="section-h2">Inventaire global des stocks</div>
+          <div class="section-sub">Vue consolidée de tous les intrants disponibles</div>
+        </div>
+        <div id="stocks-panel">
+          <div style="text-align:center;padding:3rem;color:rgba(224,240,234,0.3);">Chargement…</div>
+        </div>
+      </section>
+
+      <!-- ─── Utilisateurs ─── -->
+      <section id="section-utilisateurs" style="display:none;">
+        <div class="section-header">
+          <div class="section-h2">Gestion des utilisateurs</div>
+          <div class="section-sub">Distributeurs et agriculteurs enregistrés</div>
+        </div>
+
+        <div class="panel" style="margin-bottom:1.5rem;">
+          <div class="panel-header">
+            <div class="panel-title"><div class="panel-title-icon">🚚</div>Distributeurs</div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Identifiant</th><th>Nom</th><th>Région</th><th>Rôle</th></tr>
+              </thead>
+              <tbody id="distributeurs-tbody">
+                <tr><td colspan="4" style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Chargement…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><div class="panel-title-icon">🌾</div>Agriculteurs</div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Nom</th><th>Prénom</th><th>Contact</th><th>Région</th><th>Pièce</th></tr>
+              </thead>
+              <tbody id="agriculteurs-tbody">
+                <tr><td colspan="5" style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Chargement…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Rapports ─── -->
+      <section id="section-rapports" style="display:none;">
+        <div class="section-header">
+          <div class="section-h2">Rapports de performance</div>
+          <div class="section-sub">Performance par distributeur</div>
+        </div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Distributeur</th><th>Région</th><th>Total traitées</th><th>Validées</th><th>Rejetées</th><th>Taux validation</th></tr>
+              </thead>
+              <tbody id="rapports-tbody">
+                <tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Chargement…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Journal Audit ─── -->
+      <section id="section-audit" style="display:none;">
+        <div class="section-header">
+          <div class="section-h2">Journal d'audit</div>
+          <div class="section-sub">Toutes les actions sensibles tracées en temps réel</div>
+        </div>
+        <div class="panel">
+          <div id="audit-list">
+            <div style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Chargement…</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  @media (max-width: 768px) {
+    .responsive-2col { grid-template-columns: 1fr !important; }
+  }
+</style>
+
+<script>
+  const API_URL = '/api';
+  let currentUser = null;
+  let allDemandes = [];
+
+  // ── Session ─────────────────────────────────────────────────────
+  async function checkSession() {
+    try {
+      const res = await fetch(`${API_URL}/me`, { credentials: 'same-origin' });
+      if (!res.ok) { window.location.href = 'login.html'; return; }
+      currentUser = await res.json();
+      if (currentUser.role !== 'admin') { alert('Accès réservé aux administrateurs.'); window.location.href = 'login.html'; return; }
+      document.getElementById('user-name').textContent = currentUser.nom;
+      document.getElementById('user-avatar').textContent = (currentUser.nom || 'A')[0].toUpperCase();
+    } catch (_) { window.location.href = 'login.html'; }
+  }
+
+  async function logout() {
+    try { await fetch(`${API_URL}/logout`, { method: 'POST', credentials: 'same-origin' }); } finally { window.location.href = 'login.html'; }
+  }
+
+  // ── Navigation ───────────────────────────────────────────────────
+  const SECTIONS = { dashboard:'Dashboard', demandes:'Suivi Demandes', stocks:'Inventaire', utilisateurs:'Utilisateurs', rapports:'Rapports', audit:'Journal Audit' };
+  const SUBSUBS  = { dashboard:'Vue d\'ensemble de la plateforme', demandes:'Toutes les demandes', stocks:'Stocks consolidés', utilisateurs:'Gestion des accès', rapports:'Performance distributeurs', audit:'Traçabilité des actions' };
+
+  function switchSection(name) {
+    Object.keys(SECTIONS).forEach(s => {
+      document.getElementById(`section-${s}`).style.display = s === name ? 'block' : 'none';
+      document.getElementById(`nav-${s}`).classList.toggle('active', s === name);
+    });
+    document.getElementById('topbar-title').textContent = SECTIONS[name];
+    document.getElementById('topbar-sub').textContent   = SUBSUBS[name];
+    // Lazy load
+    if (name === 'demandes')     chargerDemandes();
+    if (name === 'stocks')       chargerStocksPanel();
+    if (name === 'utilisateurs') { chargerDistributeurs(); chargerAgriculteurs(); }
+    if (name === 'rapports')     chargerRapports();
+    if (name === 'audit')        chargerAudit();
+  }
+
+  // ── Stats ────────────────────────────────────────────────────────
+  async function chargerStats() {
+    try {
+      const res = await fetch(`${API_URL}/admin-stats`, { credentials: 'same-origin' });
+      if (!res.ok) return;
+      const s = await res.json();
+      animateNumber('stat-total-demandes', s.total_demandes || 0);
+      animateNumber('stat-attente', s.en_attente || 0);
+      animateNumber('stat-validees', s.validees || 0);
+      animateNumber('stat-rejetees', s.rejetees || 0);
+      animateNumber('stat-agriculteurs', s.total_agriculteurs || 0);
+      animateNumber('stat-distributeurs', s.total_distributeurs || 0);
+      document.getElementById('badge-attente').textContent = s.en_attente || 0;
+    } catch (_) {}
+  }
+
+  function animateNumber(id, target) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    let current = 0; const step = Math.ceil(target / 30);
+    const iv = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current;
+      if (current >= target) clearInterval(iv);
+    }, 30);
+  }
+
+  // ── Dashboard Recent ─────────────────────────────────────────────
+  async function chargerDashboard() {
+    try {
+      const res = await fetch(`${API_URL}/admin-demandes`, { credentials: 'same-origin' });
+      if (!res.ok) return;
+      const demandes = await res.json();
+      allDemandes = demandes;
+      const recent = demandes.slice(0, 6);
+      const container = document.getElementById('dash-recent-demandes');
+      if (recent.length === 0) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Aucune demande</div>'; return; }
+      container.innerHTML = recent.map(d => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+          <div>
+            <div style="font-size:0.85rem;font-weight:600;">${d.nom || ''} ${d.prenom || ''}</div>
+            <div style="font-size:0.75rem;color:rgba(224,240,234,0.4);">${d.stock_nom || '—'} · ${d.region || '—'}</div>
+          </div>
+          ${statusBadge(d.statut)}
+        </div>
+      `).join('');
+    } catch (_) {}
+
+    // Stocks on dashboard
+    try {
+      const res = await fetch(`${API_URL}/stocks`);
+      const stocks = await res.json();
+      document.getElementById('dash-stocks').innerHTML = stocks.map(s => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+          <div style="font-size:0.875rem;font-weight:500;">${s.nom}</div>
+          <div style="font-weight:700;color:#00D27A;">${s.quantite} <span style="font-weight:400;font-size:0.75rem;color:rgba(224,240,234,0.4);">${s.unite}</span></div>
+        </div>
+      `).join('');
+    } catch (_) {}
+  }
+
+  // ── Demandes ─────────────────────────────────────────────────────
+  async function chargerDemandes() {
+    try {
+      const res = await fetch(`${API_URL}/admin-demandes`, { credentials: 'same-origin' });
+      if (!res.ok) return;
+      allDemandes = await res.json();
+      renderDemandes(allDemandes);
+    } catch (_) {}
+  }
+
+  function filtrerDemandes() {
+    const status = document.getElementById('filter-status').value;
+    const region = document.getElementById('filter-region').value;
+    const filtered = allDemandes.filter(d =>
+      (!status || d.statut === status) &&
+      (!region || d.region === region)
+    );
+    renderDemandes(filtered);
+  }
+
+  function renderDemandes(list) {
+    const tbody = document.getElementById('demandes-tbody');
+    if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Aucune demande</td></tr>'; return; }
+    tbody.innerHTML = list.map(d => `
+      <tr>
+        <td><span style="font-weight:600;">${d.nom || ''} ${d.prenom || ''}</span></td>
+        <td style="color:rgba(224,240,234,0.6);font-family:monospace;">${d.contact || '—'}</td>
+        <td>${d.stock_nom || '—'}</td>
+        <td style="color:#00D27A;font-weight:600;">${d.quantite || 0} <span style="color:rgba(224,240,234,0.4);font-size:0.75rem;">${d.stock_unite || ''}</span></td>
+        <td>${d.region || '—'}</td>
+        <td>${d.distributeur_nom || '<span style="color:rgba(224,240,234,0.3);">Non assigné</span>'}</td>
+        <td>${statusBadge(d.statut)}</td>
+        <td style="color:rgba(224,240,234,0.5);font-size:0.75rem;">${new Date(d.date_demande).toLocaleDateString('fr-FR')}</td>
+      </tr>
+    `).join('');
+  }
+
+  function statusBadge(statut) {
+    const map = { EN_ATTENTE: 'warning', VALIDEE: 'success', REJETEE: 'danger' };
+    const labels = { EN_ATTENTE: 'En attente', VALIDEE: 'Validée', REJETEE: 'Rejetée' };
+    return `<span class="badge badge-${map[statut] || 'neutral'}">${labels[statut] || statut}</span>`;
+  }
+
+  // ── Stocks ───────────────────────────────────────────────────────
+  async function chargerStocksPanel() {
+    try {
+      const res = await fetch(`${API_URL}/stocks`);
+      const stocks = await res.json();
+      const container = document.getElementById('stocks-panel');
+      if (!stocks.length) { container.innerHTML = '<div style="text-align:center;padding:3rem;color:rgba(224,240,234,0.3);">Aucun stock</div>'; return; }
+      const icons = { 'Semence': '🌱', 'Engrais': '🧪', 'Urée': '🔬', 'Pesticide': '🛡️' };
+      const getIcon = name => Object.entries(icons).find(([k]) => name.includes(k))?.[1] || '📦';
+      container.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;">` +
+        stocks.map(s => `
+          <div class="panel" style="text-align:center;padding:1.75rem 1.25rem;margin-bottom:0;">
+            <div style="font-size:2.5rem;margin-bottom:0.75rem;">${getIcon(s.nom)}</div>
+            <div style="font-weight:700;margin-bottom:0.25rem;">${s.nom}</div>
+            <div style="font-size:2rem;font-weight:800;color:#00D27A;letter-spacing:-0.02em;">${s.quantite}</div>
+            <div style="font-size:0.75rem;color:rgba(224,240,234,0.35);margin-top:0.2rem;">${s.unite}</div>
+          </div>
+        `).join('') + '</div>';
+    } catch (_) {}
+  }
+
+  // ── Utilisateurs ─────────────────────────────────────────────────
+  async function chargerDistributeurs() {
+    try {
+      const res = await fetch(`${API_URL}/admin-distributeurs`, { credentials: 'same-origin' });
+      const list = await res.json();
+      const roleBadge = r => r === 'admin' ? '<span class="badge badge-info">Admin</span>' : '<span class="badge badge-success">Distributeur</span>';
+      document.getElementById('distributeurs-tbody').innerHTML = list.length
+        ? list.map(d => `<tr><td style="font-family:monospace;color:rgba(224,240,234,0.7);">${d.username}</td><td style="font-weight:600;">${d.nom}</td><td>${d.region || '—'}</td><td>${roleBadge(d.role)}</td></tr>`).join('')
+        : '<tr><td colspan="4" style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Aucun distributeur</td></tr>';
+    } catch (_) {}
+  }
+
+  async function chargerAgriculteurs() {
+    try {
+      const res = await fetch(`${API_URL}/agriculteurs`, { credentials: 'same-origin' });
+      const list = await res.json();
+      document.getElementById('agriculteurs-tbody').innerHTML = list.length
+        ? list.map(a => `<tr><td style="font-weight:600;">${a.nom}</td><td>${a.prenom}</td><td style="font-family:monospace;color:rgba(224,240,234,0.6);">${a.contact}</td><td>${a.region || '—'}</td><td><span class="badge badge-neutral">${a.type_piece || '—'}</span></td></tr>`).join('')
+        : '<tr><td colspan="5" style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Aucun agriculteur</td></tr>';
+    } catch (_) {}
+  }
+
+  // ── Rapports ─────────────────────────────────────────────────────
+  async function chargerRapports() {
+    try {
+      const [distRes, demRes] = await Promise.all([
+        fetch(`${API_URL}/admin-distributeurs`, { credentials: 'same-origin' }),
+        fetch(`${API_URL}/admin-demandes`, { credentials: 'same-origin' })
+      ]);
+      const distributeurs = await distRes.json();
+      const demandes = await demRes.json();
+      const tbody = document.getElementById('rapports-tbody');
+      const rows = distributeurs.filter(d => d.role === 'distributeur').map(d => {
+        const myDemandes = demandes.filter(dem => dem.distributeur_id === d.id && dem.statut !== 'EN_ATTENTE');
+        const validees   = myDemandes.filter(dem => dem.statut === 'VALIDEE').length;
+        const rejetees   = myDemandes.filter(dem => dem.statut === 'REJETEE').length;
+        const total      = myDemandes.length;
+        const taux       = total > 0 ? Math.round((validees / total) * 100) : 0;
+        return `<tr>
+          <td style="font-weight:600;">${d.nom}</td>
+          <td>${d.region || '—'}</td>
+          <td style="text-align:center;">${total}</td>
+          <td style="text-align:center;color:#00D27A;font-weight:700;">${validees}</td>
+          <td style="text-align:center;color:#EF4444;font-weight:700;">${rejetees}</td>
+          <td style="text-align:center;">
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <div style="flex:1;height:4px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:hidden;">
+                <div style="width:${taux}%;height:100%;background:${taux>=70?'#00D27A':taux>=40?'#F5A623':'#EF4444'};border-radius:999px;"></div>
+              </div>
+              <span style="font-weight:700;font-size:0.8rem;min-width:36px;">${taux}%</span>
+            </div>
+          </td>
+        </tr>`;
+      });
+      tbody.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Aucun rapport</td></tr>';
+    } catch (_) {}
+  }
+
+  // ── Audit ────────────────────────────────────────────────────────
+  async function chargerAudit() {
+    try {
+      const res = await fetch(`${API_URL}/admin-audit-logs`, { credentials: 'same-origin' });
+      if (!res.ok) { document.getElementById('audit-list').innerHTML = '<div style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Non disponible</div>'; return; }
+      const logs = await res.json();
+      document.getElementById('audit-list').innerHTML = logs.length
+        ? logs.map(l => `
+          <div class="audit-item">
+            <span class="audit-time">${new Date(l.timestamp).toLocaleString('fr-FR')}</span>
+            <span class="audit-action">${l.action || '—'}</span>
+            <span class="audit-user">${l.username || '—'}</span>
+            <span class="audit-ip">${l.ip || '—'}</span>
+            <span style="font-size:0.78rem;color:rgba(224,240,234,0.4);">${l.details || ''}</span>
+          </div>
+        `).join('')
+        : '<div style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Aucun log</div>';
+    } catch (_) { document.getElementById('audit-list').innerHTML = '<div style="text-align:center;padding:2rem;color:rgba(224,240,234,0.3);">Erreur de chargement</div>'; }
+  }
+
+  // ── Refresh ──────────────────────────────────────────────────────
+  function refreshAll() { chargerStats(); chargerDashboard(); }
+
+  // ── Clock ─────────────────────────────────────────────────────────
+  function updateClock() {
+    document.getElementById('topbar-time').textContent = new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+  }
+  setInterval(updateClock, 1000); updateClock();
+
+  // ── Init ─────────────────────────────────────────────────────────
+  checkSession().then(() => {
+    if (currentUser) {
+      chargerStats();
+      chargerDashboard();
+      setInterval(() => { chargerStats(); chargerDashboard(); }, 30000);
+    }
+  });
+</script>
+</body>
+</html>

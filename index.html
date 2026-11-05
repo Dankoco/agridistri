@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriDistri | Plateforme de Distribution d'Intrants Agricoles</title>
+  <meta name="description"
+    content="AgriDistri simplifie la gestion et la distribution d'intrants agricoles au Sénégal. Plateforme sécurisée pour bénéficiaires, distributeurs et administrateurs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ── Base ── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #030B0D;
+      color: #E0F0EA;
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ── Aurora ── */
+    .aurora {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .aurora::before {
+      content: '';
+      position: absolute;
+      width: 80vw;
+      height: 80vw;
+      top: -30vw;
+      left: -20vw;
+      background: radial-gradient(circle, rgba(0, 210, 122, 0.065) 0%, transparent 65%);
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+
+    .aurora::after {
+      content: '';
+      position: absolute;
+      width: 50vw;
+      height: 50vw;
+      bottom: -5vw;
+      right: -10vw;
+      background: radial-gradient(circle, rgba(0, 130, 80, 0.05) 0%, transparent 65%);
+      animation: drift 26s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(4vw, 6vw) scale(1.12);
+      }
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(3, 11, 13, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(0, 210, 122, 0.08);
+      transition: background 0.3s;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 68px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-brand img {
+      height: 34px;
+      filter: drop-shadow(0 0 8px rgba(0, 210, 122, 0.5));
+    }
+
+    .nav-brand-name {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #E0F0EA;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .nav-links a {
+      color: rgba(224, 240, 234, 0.6);
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.45rem 0.875rem;
+      border-radius: 0.5rem;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #E0F0EA;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-cta {
+      background: #00D27A;
+      color: #030B0D !important;
+      font-weight: 700 !important;
+      box-shadow: 0 0 20px rgba(0, 210, 122, 0.3);
+    }
+
+    .nav-cta:hover {
+      background: #00F090 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 24px rgba(0, 210, 122, 0.45) !important;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 1.5rem 5rem;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 820px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 210, 122, 0.1);
+      border: 1px solid rgba(0, 210, 122, 0.3);
+      color: #00D27A;
+      padding: 0.35rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-pill-dot {
+      width: 6px;
+      height: 6px;
+      background: #00D27A;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.85);
+      }
+    }
+
+    .hero-logo {
+      width: 90px;
+      height: auto;
+      margin-bottom: 2rem;
+      filter: drop-shadow(0 0 30px rgba(0, 210, 122, 0.35));
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    .hero-h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .hero-h1 .grad {
+      background: linear-gradient(135deg, #00D27A 0%, #00F0B0 50%, #7FFFD4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: rgba(224, 240, 234, 0.6);
+      max-width: 600px;
+      margin: 0 auto 2.75rem;
+      line-height: 1.8;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    .btn-primary-hero {
+      background: #00D27A;
+      color: #030B0D;
+      padding: 0.9rem 2.25rem;
+      border-radius: 0.875rem;
+      font-weight: 800;
+      font-size: 1rem;
+      box-shadow: 0 0 0 0 rgba(0, 210, 122, 0), 0 4px 20px rgba(0, 210, 122, 0.3);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary-hero:hover {
+      background: #00F090;
+      transform: translateY(-3px);
+      box-shadow: 0 0 0 4px rgba(0, 210, 122, 0.1), 0 8px 32px rgba(0, 210, 122, 0.45);
+    }
+
+    .btn-outline-hero {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #E0F0EA;
+      padding: 0.9rem 2.25rem;
+      border-radius: 0.875rem;
+      font-weight: 600;
+      font-size: 1rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-outline-hero:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(0, 210, 122, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      justify-content: center;
+      margin-top: 4rem;
+      animation: fadeUp 0.7s 0.4s ease both;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #00D27A;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .hero-stat-lbl {
+      font-size: 0.78rem;
+      color: rgba(224, 240, 234, 0.5);
+      margin-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    .hero-sep {
+      width: 1px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 5rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .inner {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #00D27A;
+      margin-bottom: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 16px;
+      height: 1px;
+      background: #00D27A;
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: rgba(224, 240, 234, 0.55);
+      font-size: 1.05rem;
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-center .section-desc {
+      margin: 0 auto;
+    }
+
+    /* ── Portals Grid ── */
+    .portals-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0, 210, 122, 0.07) 0%, transparent 70%),
+        rgba(7, 19, 24, 0.8);
+      border-top: 1px solid rgba(0, 210, 122, 0.07);
+      border-bottom: 1px solid rgba(0, 210, 122, 0.07);
+    }
+
+    .portals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 1.25rem;
+      margin-top: 3.5rem;
+    }
+
+    .portal-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 1.5rem;
+      padding: 2.25rem 2rem;
+      backdrop-filter: blur(16px);
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+      display: block;
+    }
+
+    .portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00D27A, transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .portal-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 210, 122, 0.08), transparent 70%);
+      transition: transform 0.4s;
+    }
+
+    .portal-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 210, 122, 0.25);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 210, 122, 0.05);
+    }
+
+    .portal-card:hover::before {
+      opacity: 1;
+    }
+
+    .portal-card:hover::after {
+      transform: scale(1.3);
+    }
+
+    .portal-icon-wrap {
+      width: 54px;
+      height: 54px;
+      background: rgba(0, 210, 122, 0.1);
+      border: 1px solid rgba(0, 210, 122, 0.2);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .portal-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .portal-card p {
+      color: rgba(224, 240, 234, 0.55);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .portal-card .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #00D27A;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      transition: gap 0.2s;
+    }
+
+    .portal-card:hover .card-cta {
+      gap: 0.7rem;
+    }
+
+    /* ── Features ── */
+    .features-bg {
+      background: rgba(7, 19, 24, 0.6);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(0, 210, 122, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 210, 122, 0.1);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .feature-card p {
+      color: rgba(224, 240, 234, 0.5);
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+
+    /* ── How it Works ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 60px;
+      right: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 210, 122, 0.2), transparent);
+    }
+
+    @media (max-width: 640px) {
+      .steps-grid::before {
+        display: none;
+      }
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-card:hover {
+      border-color: rgba(0, 210, 122, 0.25);
+      transform: translateY(-3px);
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00A860, #00D27A);
+      color: #030B0D;
+      font-weight: 900;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 4px 20px rgba(0, 210, 122, 0.4);
+    }
+
+    .step-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-card p {
+      color: rgba(224, 240, 234, 0.5);
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+
+    /* ── Security Section ── */
+    .security-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .security-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .security-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .security-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.02);
+      transition: border-color 0.25s;
+    }
+
+    .security-item:hover {
+      border-color: rgba(0, 210, 122, 0.15);
+    }
+
+    .security-check {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0, 210, 122, 0.12);
+      border: 1px solid rgba(0, 210, 122, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00D27A;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .security-text h5 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .security-text p {
+      font-size: 0.8rem;
+      color: rgba(224, 240, 234, 0.5);
+    }
+
+    .security-shield {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .shield-badge {
+      background: rgba(0, 210, 122, 0.06);
+      border: 1px solid rgba(0, 210, 122, 0.12);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .shield-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .shield-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #00D27A;
+    }
+
+    .shield-sub {
+      font-size: 0.8rem;
+      color: rgba(224, 240, 234, 0.5);
+      margin-top: 0.3rem;
+    }
+
+    /* ── CTA ── */
+    .cta-bg {
+      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0, 210, 122, 0.08) 0%, transparent 70%);
+      border-top: 1px solid rgba(0, 210, 122, 0.07);
+    }
+
+    .cta-card {
+      max-width: 700px;
+      margin: 0 auto;
+      background: rgba(0, 210, 122, 0.05);
+      border: 1px solid rgba(0, 210, 122, 0.18);
+      border-radius: 2rem;
+      padding: 4rem 2.5rem;
+      text-align: center;
+      backdrop-filter: blur(20px);
+    }
+
+    .cta-card h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .cta-card p {
+      color: rgba(224, 240, 234, 0.55);
+      font-size: 1rem;
+      line-height: 1.75;
+      margin-bottom: 2.25rem;
+    }
+
+    .cta-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 2.5rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      color: #00D27A;
+    }
+
+    .footer-brand img {
+      height: 26px;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: rgba(224, 240, 234, 0.35);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: rgba(224, 240, 234, 0.4);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #E0F0EA;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="aurora"></div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <img src="agridistri_logo_transparent.png" alt="AgriDistri">
+        <span class="nav-brand-name">AgriDistri</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#portails">Portails</a></li>
+        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+        <li><a href="#securite">Sécurité</a></li>
+        <li><a href="#comment">Processus</a></li>
+        <li><a href="beneficiaire-demande.html" class="nav-cta">Faire une demande</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="accueil">
+    <div class="hero-inner">
+      <div class="hero-pill">
+        <div class="hero-pill-dot"></div>
+        Plateforme Agricole Sénégal
+      </div>
+      <img src="agridistri_logo_transparent.png" alt="AgriDistri" class="hero-logo">
+      <h1 class="hero-h1">
+        La distribution d'intrants<br>
+        <span class="grad">réinventée pour le terrain</span>
+      </h1>
+      <p class="hero-desc">
+        AgriDistri connecte agriculteurs, distributeurs et administrateurs sur une plateforme unifiée et sécurisée.
+        Gérez vos demandes, stocks et livraisons en temps réel.
+      </p>
+      <div class="hero-btns">
+        <a href="beneficiaire-demande.html" class="btn-primary-hero">
+          🌱 Faire une demande
+        </a>
+        <a href="login.html" class="btn-outline-hero">
+          🔒 Espace Pro
+        </a>
+      </div>
+      <div class="hero-divider">
+        <div class="hero-stat">
+          <div class="hero-stat-num">3</div>
+          <div class="hero-stat-lbl">Portails dédiés</div>
+        </div>
+        <div class="hero-sep"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">100%</div>
+          <div class="hero-stat-lbl">Sans compte pour le bénéficiaire</div>
+        </div>
+        <div class="hero-sep"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">Temps réel</div>
+          <div class="hero-stat-lbl">Suivi des stocks</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portails -->
+  <section id="portails" class="portals-bg">
+    <div class="inner">
+      <div class="text-center animate-on-scroll">
+        <div class="section-label">Accès rapide</div>
+        <h2 class="section-title">Choisissez votre espace</h2>
+        <p class="section-desc">Chaque portail est taillé pour un rôle spécifique, avec une interface adaptée aux
+          besoins opérationnels.</p>
+      </div>
+      <div class="portals-grid">
+        <a href="beneficiaire-demande.html" class="portal-card animate-on-scroll" id="portal-beneficiaire">
+          <div class="portal-icon-wrap">🌾</div>
+          <h3>Portail Bénéficiaire</h3>
+          <p>Soumettez une demande d'intrants en quelques minutes, sans création de compte. Suivez l'état de validation
+            en temps réel.</p>
+          <div class="card-cta">Accéder maintenant <span>→</span></div>
+        </a>
+        <a href="login.html" class="portal-card animate-on-scroll" id="portal-distributeur">
+          <div class="portal-icon-wrap">🚚</div>
+          <h3>Portail Distributeur</h3>
+          <p>Validez les demandes, gérez votre stock régional et suivez vos opérations depuis un tableau de bord
+            centralisé et sécurisé.</p>
+          <div class="card-cta">Se connecter <span>→</span></div>
+        </a>
+        <a href="login.html" class="portal-card animate-on-scroll" id="portal-admin">
+          <div class="portal-icon-wrap">⚙️</div>
+          <h3>Portail Administrateur</h3>
+          <p>Supervisez l'ensemble des demandes, des stocks et des distributeurs. Accédez aux statistiques globales et
+            au journal d'audit.</p>
+          <div class="card-cta">Se connecter <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fonctionnalités -->
+  <section id="fonctionnalites" class="features-bg">
+    <div class="inner">
+      <div class="text-center animate-on-scroll">
+        <div class="section-label">Fonctionnalités</div>
+        <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+        <p class="section-desc">Conçu pour les réalités du terrain agricole sénégalais : simple, fiable, complet.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">📋</div>
+          <h4>Gestion des demandes</h4>
+          <p>Soumission, suivi et validation avec un flux clair et traçable de bout en bout.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">📦</div>
+          <h4>Stocks en temps réel</h4>
+          <p>Suivi des inventaires par distributeur et à l'échelle globale avec alertes automatiques.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">📊</div>
+          <h4>Dashboard Admin</h4>
+          <p>Statistiques clés, rapports de performance et journal d'audit intégré.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">🗺️</div>
+          <h4>Couverture nationale</h4>
+          <p>15 communes couvertes, zones Ouest et Est. Assignation géographique automatique.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">✅</div>
+          <h4>Validation d'identité</h4>
+          <p>Vérification automatique CNI, Passeport, Carte de séjour et Permis de conduire.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">📱</div>
+          <h4>Téléphone sénégalais</h4>
+          <p>Validation native des numéros au format sénégalais (7X, 68) avec normalisation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sécurité -->
+  <section id="securite">
+    <div class="inner">
+      <div class="security-grid">
+        <div class="animate-on-scroll">
+          <div class="section-label">Sécurité Enterprise</div>
+          <h2 class="section-title">Protégé comme les<br>grandes plateformes</h2>
+          <p class="section-desc" style="margin-bottom: 2rem;">Authentification JWT, headers de sécurité, rate limiting
+            et journal d'audit — des standards utilisés par Google et Stripe.</p>
+          <ul class="security-list">
+            <li class="security-item">
+              <div class="security-check">🔐</div>
+              <div class="security-text">
+                <h5>JWT HttpOnly Cookies</h5>
+                <p>Tokens inaccessibles au JavaScript — protection XSS totale</p>
+              </div>
+            </li>
+            <li class="security-item">
+              <div class="security-check">🛡️</div>
+              <div class="security-text">
+                <h5>Rate Limiting</h5>
+                <p>5 tentatives / 15 min — brute-force impossible</p>
+              </div>
+            </li>
+            <li class="security-item">
+              <div class="security-check">🔒</div>
+              <div class="security-text">
+                <h5>Headers HTTP sécurisés</h5>
+                <p>CSP, X-Frame-Options, HSTS — clickjacking bloqué</p>
+              </div>
+            </li>
+            <li class="security-item">
+              <div class="security-check">📝</div>
+              <div class="security-text">
+                <h5>Journal d'audit</h5>
+                <p>Chaque action tracée : IP, timestamp, utilisateur</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="security-shield animate-on-scroll">
+          <div class="shield-badge">
+            <span class="shield-icon">🛡️</span>
+            <div class="shield-title">Sécurité Enterprise</div>
+            <div class="shield-sub">Standards Stripe / Google</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="shield-badge" style="padding: 1.25rem;">
+              <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🔑</div>
+              <div style="font-size: 0.8rem; font-weight: 700;">scrypt</div>
+              <div style="font-size: 0.72rem; color: rgba(224,240,234,0.5);">Hashage mdp</div>
+            </div>
+            <div class="shield-badge" style="padding: 1.25rem;">
+              <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🌐</div>
+              <div style="font-size: 0.8rem; font-weight: 700;">CORS</div>
+              <div style="font-size: 0.72rem; color: rgba(224,240,234,0.5);">Origines restreintes</div>
+            </div>
+            <div class="shield-badge" style="padding: 1.25rem;">
+              <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">👥</div>
+              <div style="font-size: 0.8rem; font-weight: 700;">RBAC</div>
+              <div style="font-size: 0.72rem; color: rgba(224,240,234,0.5);">Rôles stricts</div>
+            </div>
+            <div class="shield-badge" style="padding: 1.25rem;">
+              <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">📋</div>
+              <div style="font-size: 0.8rem; font-weight: 700;">Audit</div>
+              <div style="font-size: 0.72rem; color: rgba(224,240,234,0.5);">Traçabilité totale</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comment ça marche -->
+  <section id="comment" class="features-bg">
+    <div class="inner">
+      <div class="text-center animate-on-scroll">
+        <div class="section-label">Processus</div>
+        <h2 class="section-title">Comment ça marche ?</h2>
+        <p class="section-desc">Un flux simple en 4 étapes, du bénéficiaire jusqu'à la livraison.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card animate-on-scroll">
+          <div class="step-num">1</div>
+          <h4>Demande bénéficiaire</h4>
+          <p>L'agriculteur remplit le formulaire public avec ses informations et choisit son intrant. Aucun compte
+            requis.</p>
+        </div>
+        <div class="step-card animate-on-scroll">
+          <div class="step-num">2</div>
+          <h4>Attribution automatique</h4>
+          <p>La plateforme assigne la demande au distributeur de la zone géographique correspondante.</p>
+        </div>
+        <div class="step-card animate-on-scroll">
+          <div class="step-num">3</div>
+          <h4>Validation distributeur</h4>
+          <p>Le distributeur examine la demande, vérifie le stock disponible et valide ou rejette via son portail.</p>
+        </div>
+        <div class="step-card animate-on-scroll">
+          <div class="step-num">4</div>
+          <h4>Supervision admin</h4>
+          <p>L'administrateur supervise l'ensemble via les statistiques, rapports globaux et journal d'audit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-bg" id="contact">
+    <div class="inner">
+      <div class="cta-card animate-on-scroll">
+        <h2>Prêt à transformer votre distribution agricole ?</h2>
+        <p>Contactez-nous pour une démonstration personnalisée ou commencez directement avec le portail bénéficiaire.
+        </p>
+        <div class="cta-btns">
+          <a href="beneficiaire-demande.html" class="btn-primary-hero">🌱 Commencer maintenant</a>
+          <a href="mailto:bdankoco@gmail.com" class="btn-outline-hero">✉️ Nous contacter</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="agridistri_logo_transparent.png" alt="AgriDistri">
+        AgriDistri
+      </div>
+      <span class="footer-copy">© 2026 AgriDistri — Tous droits réservés.</span>
+      <div class="footer-links">
+        <a href="mailto:bdankoco@gmail.com">Support</a>
+        <a href="#accueil">Accueil</a>
+        <a href="login.html">Connexion</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection Observer animations
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 90);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
+
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').style.background =
+        window.scrollY > 30 ? 'rgba(3,11,13,0.97)' : 'rgba(3,11,13,0.7)';
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demande d'Intrants | AgriDistri</title>
+  <meta name="description" content="Soumettez votre demande d'intrants agricoles et suivez son statut en temps réel.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { padding: 0; }
+
+    /* ── Header ── */
+    .pub-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(3,11,13,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 62px;
+    }
+    .pub-brand { display: flex; align-items: center; gap: 0.75rem; }
+    .pub-brand img { height: 28px; filter: drop-shadow(0 0 6px rgba(0,210,122,0.4)); }
+    .pub-brand-name { font-weight: 800; font-size: 1rem; }
+    .pub-brand-tag  { font-size: 0.7rem; color: rgba(224,240,234,0.4); }
+    .pub-back {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      color: rgba(224,240,234,0.5); font-size: 0.82rem; font-weight: 500;
+      padding: 0.45rem 1rem; border-radius: 0.625rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.03);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .pub-back:hover { color: #E0F0EA; border-color: rgba(255,255,255,0.12); }
+
+    /* ── Content ── */
+    .pub-wrap {
+      max-width: 760px; margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+      position: relative; z-index: 1;
+    }
+    .pub-hero { text-align: center; margin-bottom: 3rem; }
+    .pub-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(0,210,122,0.1); border: 1px solid rgba(0,210,122,0.2);
+      color: #00D27A; border-radius: 999px;
+      padding: 0.3rem 0.9rem; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .pub-hero h1 { font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.6rem; }
+    .pub-hero p  { color: rgba(224,240,234,0.55); font-size: 0.95rem; line-height: 1.7; }
+
+    /* ── Tabs ── */
+    .pub-tabs {
+      display: flex; gap: 4px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 1rem; padding: 4px;
+      margin-bottom: 2rem;
+    }
+    .pub-tab {
+      flex: 1; padding: 0.65rem 1rem;
+      border-radius: calc(1rem - 4px);
+      font-size: 0.875rem; font-weight: 600;
+      color: rgba(224,240,234,0.5); background: transparent;
+      border: none; cursor: pointer;
+      transition: all 0.2s; font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+    }
+    .pub-tab.active {
+      background: rgba(0,210,122,0.12);
+      color: #00D27A;
+      border: 1px solid rgba(0,210,122,0.2);
+    }
+    .pub-tab:hover:not(.active) { color: #E0F0EA; }
+
+    /* ── Card ── */
+    .pub-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 1.5rem;
+      padding: 2.25rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      margin-bottom: 1.5rem;
+    }
+    .pub-card-title {
+      font-size: 1.1rem; font-weight: 700;
+      margin-bottom: 1.75rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .pub-card-icon {
+      width: 34px; height: 34px; border-radius: 0.625rem;
+      background: rgba(0,210,122,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    /* ── Form ── */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    @media (max-width: 580px) { .form-row { grid-template-columns: 1fr; } }
+    .form-g { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .f-label {
+      font-size: 0.775rem; font-weight: 600;
+      color: rgba(224,240,234,0.6);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .f-label .req { color: #00D27A; }
+    .f-input, .f-select, .f-textarea {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0.875rem;
+      padding: 0.8rem 1rem;
+      color: #E0F0EA; font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .f-input::placeholder, .f-textarea::placeholder { color: rgba(224,240,234,0.2); }
+    .f-input:focus, .f-select:focus, .f-textarea:focus {
+      border-color: #00D27A;
+      box-shadow: 0 0 0 3px rgba(0,210,122,0.1);
+      background: rgba(0,210,122,0.03);
+    }
+    .f-input:disabled, .f-select:disabled {
+      opacity: 0.45; cursor: not-allowed;
+    }
+    .f-select option { background: #071318; color: #E0F0EA; }
+    .f-textarea { resize: vertical; min-height: 90px; }
+    .f-hint { font-size: 0.775rem; color: rgba(224,240,234,0.35); margin-top: 0.25rem; }
+    .f-hint.ok  { color: #00D27A; }
+    .f-hint.err { color: #EF4444; }
+
+    .form-divider {
+      height: 1px; background: rgba(255,255,255,0.05);
+      margin: 1.5rem 0;
+    }
+
+    .btn-submit-pub {
+      width: 100%; padding: 1rem;
+      background: #00D27A; color: #030B0D;
+      border: none; border-radius: 0.875rem;
+      font-size: 0.95rem; font-weight: 800;
+      cursor: pointer; margin-top: 0.5rem;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-submit-pub:hover:not(:disabled) {
+      background: #00F090;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(0,210,122,0.4);
+    }
+    .btn-submit-pub:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .form-alert {
+      display: none; padding: 0.875rem 1.1rem;
+      border-radius: 0.875rem; font-size: 0.875rem;
+      align-items: flex-start; gap: 0.6rem;
+      margin-top: 1rem; border: 1px solid;
+    }
+    .form-alert.show { display: flex; animation: slideIn 0.3s ease; }
+    .form-alert.success { background: rgba(0,210,122,0.08); color: #00D27A; border-color: rgba(0,210,122,0.2); }
+    .form-alert.error   { background: rgba(239,68,68,0.08);  color: #EF4444; border-color: rgba(239,68,68,0.2);  }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Demand History ── */
+    .demand-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 1.25rem; padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .demand-card:hover { border-color: rgba(0,210,122,0.15); transform: translateX(2px); }
+    .demand-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .demand-product { font-weight: 700; font-size: 1rem; }
+    .demand-date    { font-size: 0.78rem; color: rgba(224,240,234,0.4); margin-top: 0.2rem; }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.25rem 0.75rem; border-radius: 999px;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+    .status-badge::before { content: '●'; font-size: 0.5rem; }
+    .status-en_attente { background: rgba(245,166,35,0.12); color: #F5A623; border: 1px solid rgba(245,166,35,0.25); }
+    .status-validee    { background: rgba(0,210,122,0.12);  color: #00D27A; border: 1px solid rgba(0,210,122,0.25);  }
+    .status-rejetee    { background: rgba(239,68,68,0.12);  color: #EF4444; border: 1px solid rgba(239,68,68,0.25);  }
+
+    .demand-meta {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.875rem; padding: 1rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 0.875rem;
+    }
+    .meta-field label { display: block; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(224,240,234,0.35); margin-bottom: 0.2rem; }
+    .meta-field span  { font-size: 0.875rem; font-weight: 500; }
+
+    .empty-box {
+      text-align: center; padding: 3.5rem 1.5rem;
+      color: rgba(224,240,234,0.3);
+    }
+    .empty-box-icon { font-size: 3rem; display: block; margin-bottom: 0.875rem; opacity: 0.4; }
+
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(3,11,13,0.3); border-top-color: #030B0D; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* aurora in bg */
+    .aurora { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .aurora::before { content: ''; position: absolute; width: 80vw; height: 80vw; top: -30vw; left: -20vw; background: radial-gradient(circle, rgba(0,210,122,0.05) 0%, transparent 65%); animation: drift 20s ease-in-out infinite alternate; }
+    .aurora::after  { content: ''; position: absolute; width: 50vw; height: 50vw; bottom: -5vw; right: -10vw; background: radial-gradient(circle, rgba(0,130,80,0.04) 0%, transparent 65%); animation: drift 26s ease-in-out infinite alternate-reverse; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(4vw,6vw) scale(1.12); } }
+  </style>
+</head>
+<body>
+  <div class="aurora"></div>
+
+  <!-- Header -->
+  <header class="pub-header">
+    <div class="pub-brand">
+      <img src="agridistri_logo_transparent.png" alt="AgriDistri">
+      <div>
+        <div class="pub-brand-name">AgriDistri</div>
+        <div class="pub-brand-tag">Portail Bénéficiaire</div>
+      </div>
+    </div>
+    <button class="pub-back" onclick="window.location.href='index.html'">
+      ← Accueil
+    </button>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pub-wrap">
+    <!-- Hero -->
+    <div class="pub-hero animate-fade-up">
+      <div class="pub-eyebrow">🌾 Portail Public</div>
+      <h1>Demande d'Intrants Agricoles</h1>
+      <p>Soumettez votre demande en quelques minutes et suivez son statut en temps réel. Aucun compte requis.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="pub-tabs">
+      <button class="pub-tab active" id="tab-form-btn" onclick="switchTab('form')">
+        📝 Nouvelle demande
+      </button>
+      <button class="pub-tab" id="tab-history-btn" onclick="switchTab('history')">
+        📋 Mes demandes
+      </button>
+    </div>
+
+    <!-- Form Tab -->
+    <div id="tab-form">
+      <div class="pub-card animate-fade-up">
+        <div class="pub-card-title">
+          <div class="pub-card-icon">👤</div>
+          Informations personnelles
+        </div>
+        <form id="demande-form">
+          <div class="form-row">
+            <div class="form-g">
+              <label class="f-label" for="nom">Nom <span class="req">*</span></label>
+              <input class="f-input" type="text" id="nom" placeholder="Votre nom de famille" required>
+            </div>
+            <div class="form-g">
+              <label class="f-label" for="prenom">Prénom <span class="req">*</span></label>
+              <input class="f-input" type="text" id="prenom" placeholder="Votre prénom" required>
+            </div>
+          </div>
+
+          <div class="form-g">
+            <label class="f-label" for="contact">Téléphone sénégalais <span class="req">*</span></label>
+            <input class="f-input" type="tel" id="contact" pattern="(7[015678]|68)[0-9]{7}" maxlength="9" placeholder="771234567" required>
+            <div class="f-hint" id="tel-hint">Format : 7X XXXXXXX (9 chiffres)</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-g">
+              <label class="f-label" for="type_piece">Type de pièce <span class="req">*</span></label>
+              <select class="f-select" id="type_piece" required>
+                <option value="">-- Sélectionner --</option>
+                <option value="CNI">CNI (13 chiffres)</option>
+                <option value="Passeport">Passeport (9 chiffres)</option>
+                <option value="Carte de séjour">Carte de séjour (12 chiffres)</option>
+                <option value="Permis de conduire">Permis de conduire (8 chiffres)</option>
+              </select>
+            </div>
+            <div class="form-g">
+              <label class="f-label" for="numero_identite">Numéro de pièce <span class="req">*</span></label>
+              <input class="f-input" type="text" id="numero_identite" inputmode="numeric" disabled placeholder="Choisissez d'abord le type" required>
+              <div class="f-hint" id="numero-identite-help">Sélectionnez un type de pièce pour activer ce champ.</div>
+            </div>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <div class="pub-card-title" style="margin-bottom: 1.5rem;">
+            <div class="pub-card-icon">📦</div>
+            Détails de la demande
+          </div>
+
+          <div class="form-g">
+            <label class="f-label" for="region">Région <span class="req">*</span></label>
+            <select class="f-select" id="region" required>
+              <option value="">-- Sélectionner votre région --</option>
+              <optgroup label="🌍 Zone Ouest">
+                <option value="Dakar">Dakar</option>
+                <option value="Pikine">Pikine</option>
+                <option value="Guédiawaye">Guédiawaye</option>
+                <option value="Rufisque">Rufisque</option>
+                <option value="Thiès">Thiès</option>
+                <option value="Mbour">Mbour</option>
+                <option value="Kaolack">Kaolack</option>
+                <option value="Saint-Louis">Saint-Louis</option>
+                <option value="Louga">Louga</option>
+                <option value="Diourbel">Diourbel</option>
+              </optgroup>
+              <optgroup label="🌍 Zone Est">
+                <option value="Tambacounda">Tambacounda</option>
+                <option value="Kedougou">Kedougou</option>
+                <option value="Kolda">Kolda</option>
+                <option value="Sédhiou">Sédhiou</option>
+                <option value="Matam">Matam</option>
+              </optgroup>
+            </select>
+            <div class="f-hint" id="zone-hint">La zone de livraison s'affichera ici après votre sélection.</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-g">
+              <label class="f-label" for="produit">Intrant demandé <span class="req">*</span></label>
+              <select class="f-select" id="produit" required>
+                <option value="">-- Chargement… --</option>
+              </select>
+            </div>
+            <div class="form-g">
+              <label class="f-label" for="quantite">Quantité <span class="req">*</span></label>
+              <input class="f-input" type="number" id="quantite" step="0.1" min="0.1" placeholder="Ex: 50" required>
+              <div class="f-hint" id="quantite-hint">Sélectionnez d'abord un intrant.</div>
+              <div class="f-hint err" id="quantite-error" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="form-g">
+            <label class="f-label" for="commentaire">Commentaire (optionnel)</label>
+            <textarea class="f-textarea" id="commentaire" placeholder="Informations complémentaires, besoins spécifiques…"></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit-pub" id="submit-btn">
+            <span id="submit-text">🌱 Soumettre ma demande</span>
+            <span id="submit-spinner" class="spinner" style="display:none;"></span>
+          </button>
+          <div class="form-alert" id="form-message"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div id="tab-history" style="display:none;">
+      <div class="pub-card">
+        <div class="pub-card-title">
+          <div class="pub-card-icon">🔍</div>
+          Suivre mes demandes
+        </div>
+        <div class="form-g">
+          <label class="f-label" for="search-contact">Votre numéro de téléphone</label>
+          <div style="display:flex; gap:0.75rem;">
+            <input class="f-input" type="tel" id="search-contact" placeholder="771234567" style="flex:1;">
+            <button onclick="searchDemandes()" style="background:#00D27A; color:#030B0D; border:none; border-radius:0.875rem; padding:0 1.5rem; font-weight:700; font-size:0.875rem; cursor:pointer; font-family:'Inter',sans-serif; white-space:nowrap; transition:all 0.2s;" onmouseover="this.style.background='#00F090'" onmouseout="this.style.background='#00D27A'">
+              Rechercher
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="demandes-container">
+        <div class="empty-box">
+          <span class="empty-box-icon">📋</span>
+          Entrez votre numéro pour voir vos demandes.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API_URL = '/api';
+
+    // ── Tab switching ──────────────────────────────────────────────
+    function switchTab(tab) {
+      document.getElementById('tab-form').style.display    = tab === 'form'    ? 'block' : 'none';
+      document.getElementById('tab-history').style.display = tab === 'history' ? 'block' : 'none';
+      document.getElementById('tab-form-btn').classList.toggle('active',    tab === 'form');
+      document.getElementById('tab-history-btn').classList.toggle('active', tab === 'history');
+    }
+
+    // ── Piece rules ────────────────────────────────────────────────
+    const PIECE_RULES = {
+      'CNI':                { label: 'Numéro de CNI',          length: 13, placeholder: 'Ex: 1751199000123',  help: '13 chiffres requis.' },
+      'Passeport':          { label: 'Numéro de passeport',    length: 9,  placeholder: 'Ex: 123456789',     help: '9 chiffres requis.' },
+      'Carte de séjour':    { label: 'Numéro de carte de séjour', length: 12, placeholder: 'Ex: 123456789012', help: '12 chiffres requis.' },
+      'Permis de conduire': { label: 'Numéro de permis',       length: 8,  placeholder: 'Ex: 12345678',      help: '8 chiffres requis.' },
+      'Permis':             { label: 'Numéro de permis',       length: 8,  placeholder: 'Ex: 12345678',      help: '8 chiffres requis.' }
+    };
+
+    const COMMUNE_ZONES = {
+      'Dakar':'Ouest','Pikine':'Ouest','Guédiawaye':'Ouest','Rufisque':'Ouest','Thiès':'Ouest',
+      'Mbour':'Ouest','Kaolack':'Ouest','Saint-Louis':'Ouest','Louga':'Ouest','Diourbel':'Ouest',
+      'Tambacounda':'Est','Kedougou':'Est','Kolda':'Est','Sédhiou':'Est','Matam':'Est'
+    };
+
+    function applyPieceRules(type) {
+      const input = document.getElementById('numero_identite');
+      const help  = document.getElementById('numero-identite-help');
+      if (!type || !PIECE_RULES[type]) {
+        input.disabled = true; input.value = '';
+        input.removeAttribute('pattern'); input.removeAttribute('maxlength');
+        input.placeholder = 'Choisissez d\'abord le type de pièce';
+        help.textContent = 'Sélectionnez un type de pièce pour activer ce champ.';
+        help.className = 'f-hint';
+        return;
+      }
+      const rule = PIECE_RULES[type];
+      input.disabled = false; input.value = '';
+      input.maxLength = rule.length;
+      input.pattern   = `\\d{${rule.length}}`;
+      input.placeholder = rule.placeholder;
+      help.textContent  = rule.help;
+      help.className    = 'f-hint ok';
+    }
+
+    function normaliserTelephone(v) {
+      return String(v).trim().replace(/^\+?221/, '').replace(/^00221/, '').replace(/[^0-9]/g, '');
+    }
+    function validerTelephone(v) { return /^(7[015678]|68)\d{7}$/.test(normaliserTelephone(v)); }
+    function validerNumeroIdentite(num, type) {
+      const rule = PIECE_RULES[type]; if (!rule) return false;
+      return new RegExp(`^\\d{${rule.length}}$`).test(String(num).trim().replace(/[\s\-.\/]+/g,''));
+    }
+
+    function mettreAJourZone() {
+      const commune = document.getElementById('region').value;
+      const hint    = document.getElementById('zone-hint');
+      hint.textContent = commune ? `✅ Zone attribuée : ${COMMUNE_ZONES[commune] || 'Ouest'}` : 'La zone de livraison s\'affichera ici après votre sélection.';
+      hint.className = commune ? 'f-hint ok' : 'f-hint';
+    }
+
+    document.getElementById('type_piece').addEventListener('change', e => applyPieceRules(e.target.value));
+    document.getElementById('region').addEventListener('change', mettreAJourZone);
+    applyPieceRules('');
+
+    // Téléphone feedback
+    document.getElementById('contact').addEventListener('input', e => {
+      const hint = document.getElementById('tel-hint');
+      if (e.target.value) {
+        const ok = validerTelephone(e.target.value);
+        hint.textContent  = ok ? '✅ Numéro valide' : '⚠️ Format invalide — ex: 771234567';
+        hint.className    = ok ? 'f-hint ok' : 'f-hint err';
+      } else {
+        hint.textContent = 'Format : 7X XXXXXXX (9 chiffres)'; hint.className = 'f-hint';
+      }
+    });
+
+    // ── Stocks ────────────────────────────────────────────────────
+    const stocksDisponibles = {};
+
+    async function chargerIntrants() {
+      try {
+        const r = await fetch(`${API_URL}/stocks`);
+        const stocks = await r.json();
+        const sel = document.getElementById('produit');
+        stocks.forEach(s => { stocksDisponibles[s.id] = { quantite: s.quantite, unite: s.unite, nom: s.nom }; });
+        sel.innerHTML = '<option value="">-- Sélectionner un intrant --</option>' +
+          stocks.map(s => `<option value="${s.id}">${s.nom} — Disponible : ${s.quantite} ${s.unite}</option>`).join('');
+      } catch (e) { console.error('Erreur chargement intrants:', e); }
+    }
+
+    function mettreAJourHintQuantite() {
+      const id = document.getElementById('produit').value;
+      const hint = document.getElementById('quantite-hint');
+      const input = document.getElementById('quantite');
+      if (id && stocksDisponibles[id]) {
+        const info = stocksDisponibles[id];
+        hint.textContent = `Stock disponible : ${info.quantite} ${info.unite}`;
+        hint.className = 'f-hint ok';
+        input.max = info.quantite;
+      } else {
+        hint.textContent = 'Sélectionnez d\'abord un intrant pour voir la quantité disponible.';
+        hint.className = 'f-hint';
+        input.removeAttribute('max');
+      }
+      validerQuantite();
+    }
+
+    function validerQuantite() {
+      const id = document.getElementById('produit').value;
+      const input = document.getElementById('quantite');
+      const errDiv = document.getElementById('quantite-error');
+      const btn = document.getElementById('submit-btn');
+      const q = parseFloat(input.value);
+      if (!id || !input.value) { errDiv.style.display = 'none'; btn.disabled = false; return true; }
+      const info = stocksDisponibles[id];
+      if (info && q > info.quantite) {
+        errDiv.textContent = `⚠️ Maximum disponible : ${info.quantite} ${info.unite}`;
+        errDiv.style.display = 'block'; btn.disabled = true; return false;
+      }
+      errDiv.style.display = 'none'; btn.disabled = false; return true;
+    }
+
+    document.getElementById('produit').addEventListener('change', mettreAJourHintQuantite);
+    document.getElementById('quantite').addEventListener('input', validerQuantite);
+
+    // ── Form Submit ───────────────────────────────────────────────
+    document.getElementById('demande-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn    = document.getElementById('submit-btn');
+      const txt    = document.getElementById('submit-text');
+      const spin   = document.getElementById('submit-spinner');
+      const msg    = document.getElementById('form-message');
+
+      const contact = normaliserTelephone(document.getElementById('contact').value);
+      document.getElementById('contact').value = contact;
+      const typePiece = document.getElementById('type_piece').value;
+      const numPiece  = document.getElementById('numero_identite').value;
+      const commune   = document.getElementById('region').value;
+
+      // Validations client
+      if (!validerTelephone(contact)) {
+        showAlert(msg, '❌ Numéro de téléphone invalide. Format sénégalais requis : 7XXXXXXXX', 'error'); return;
+      }
+      if (!validerNumeroIdentite(numPiece, typePiece)) {
+        const rule = PIECE_RULES[typePiece] || {};
+        showAlert(msg, `❌ Numéro de pièce invalide. ${rule.help || ''}`, 'error'); return;
+      }
+      if (!validerQuantite()) {
+        showAlert(msg, '❌ La quantité demandée dépasse le stock disponible.', 'error'); return;
+      }
+
+      btn.disabled = true; txt.textContent = 'Envoi en cours…'; spin.style.display = 'inline-block';
+      msg.className = 'form-alert';
+
+      try {
+        const res = await fetch(`${API_URL}/demandes-beneficiaire`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nom: document.getElementById('nom').value,
+            prenom: document.getElementById('prenom').value,
+            contact,
+            region: commune,
+            zone: COMMUNE_ZONES[commune] || 'Ouest',
+            numero_identite: String(numPiece).trim().replace(/[\s\-.\/]+/g,''),
+            type_piece: typePiece,
+            stock_id: document.getElementById('produit').value,
+            quantite: parseFloat(document.getElementById('quantite').value),
+            commentaire: document.getElementById('commentaire').value
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showAlert(msg, '✅ Demande soumise avec succès ! Un distributeur vous contactera.', 'success');
+          document.getElementById('demande-form').reset();
+          applyPieceRules('');
+          mettreAJourZone();
+          document.getElementById('search-contact').value = contact;
+          setTimeout(() => { switchTab('history'); chargerDemandes(contact); }, 1200);
+        } else {
+          showAlert(msg, '❌ ' + (data.error || 'Erreur lors de la soumission'), 'error');
+        }
+      } catch (_) {
+        showAlert(msg, '❌ Erreur de connexion au serveur', 'error');
+      } finally {
+        btn.disabled = false; txt.textContent = '🌱 Soumettre ma demande'; spin.style.display = 'none';
+      }
+    });
+
+    function showAlert(el, text, type) {
+      el.textContent = text;
+      el.className = `form-alert ${type} show`;
+    }
+
+    // ── Demandes History ──────────────────────────────────────────
+    async function chargerDemandes(contact) {
+      const container = document.getElementById('demandes-container');
+      container.innerHTML = '<div class="empty-box"><span class="empty-box-icon" style="animation:spin 1s linear infinite;display:inline-block;">⏳</span>Chargement…</div>';
+      try {
+        const res = await fetch(`${API_URL}/demandes-beneficiaire?contact=${encodeURIComponent(contact)}`);
+        if (!res.ok) { container.innerHTML = '<div class="empty-box"><span class="empty-box-icon">⚠️</span>Erreur lors du chargement.</div>'; return; }
+        const demandes = await res.json();
+        if (demandes.length === 0) {
+          container.innerHTML = '<div class="empty-box"><span class="empty-box-icon">📭</span>Aucune demande trouvée pour ce numéro.</div>';
+          return;
+        }
+        const statIcons = { EN_ATTENTE: '⏳', VALIDEE: '✅', REJETEE: '❌' };
+        container.innerHTML = demandes.map(d => `
+          <div class="demand-card">
+            <div class="demand-top">
+              <div>
+                <div class="demand-product">${d.stock_nom}</div>
+                <div class="demand-date">Demande du ${new Date(d.date_demande).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})}</div>
+              </div>
+              <span class="status-badge status-${d.statut.toLowerCase()}">${statIcons[d.statut] || ''} ${d.statut.replace('_',' ')}</span>
+            </div>
+            <div class="demand-meta">
+              <div class="meta-field"><label>Quantité</label><span>${d.quantite} ${d.stock_unite}</span></div>
+              <div class="meta-field"><label>Région</label><span>${d.region || '—'}</span></div>
+              ${d.distributeur_nom ? `<div class="meta-field"><label>Distributeur</label><span>${d.distributeur_nom}</span></div>` : ''}
+              ${d.statut !== 'EN_ATTENTE' && d.date_validation ? `<div class="meta-field"><label>Traitée le</label><span>${new Date(d.date_validation).toLocaleDateString('fr-FR')}</span></div>` : ''}
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        container.innerHTML = '<div class="empty-box"><span class="empty-box-icon">⚠️</span>Erreur de connexion.</div>';
+      }
+    }
+
+    function searchDemandes() {
+      const contact = normaliserTelephone(document.getElementById('search-contact').value);
+      if (contact) chargerDemandes(contact);
+    }
+
+    // Load contact from form automatically
+    document.getElementById('contact').addEventListener('change', e => {
+      if (e.target.value) { document.getElementById('search-contact').value = normaliserTelephone(e.target.value); }
+    });
+
+    // Auto-refresh history
+    setInterval(() => {
+      const contact = document.getElementById('search-contact').value;
+      if (contact && document.getElementById('tab-history').style.display !== 'none') {
+        chargerDemandes(contact);
+      }
+    }, 30000);
+
+    chargerIntrants();
+  </script>
+</body>
+</html>
