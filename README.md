@@ -84,4 +84,4 @@ python -m pytest tests
 
 ## Contact
 
-bdankoco@gamil.com
+bdankoco@gmail.com
