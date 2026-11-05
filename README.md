@@ -20,6 +20,8 @@ Application web de distribution d'intrants agricoles (semences, engrais, pestici
 Prérequis : Python 3.10 ou plus.
 
 ```powershell
+git clone https://github.com/Dankoco/agridistri.git
+cd agridistri
 py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
