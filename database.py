@@ -1,8 +1,8 @@
-﻿import sqlite3
+import sqlite3
 import os
 from werkzeug.security import generate_password_hash
 
-DB_PATH = os.path.join(os.path.dirname(__file__), 'agridistri.db')
+DB_PATH = os.environ.get('AGRIDISTRI_DB') or os.path.join(os.path.dirname(__file__), 'agridistri.db')
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)

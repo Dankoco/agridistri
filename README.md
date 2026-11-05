@@ -74,9 +74,18 @@ login.html                 connexion
 portail-distributeur.html  tableau de bord distributeur
 portail-admin.html         tableau de bord administrateur
 style.css                  styles
-tests/                     script de test de validation (serveur lance requis)
+tests/                     tests pytest (base temporaire)
 .env.example               modèle de configuration
 ```
+
+## Tests
+
+```powershell
+python -m pip install -r requirements-dev.txt
+python -m pytest tests
+```
+
+Les tests utilisent une base temporaire et ne touchent pas à `agridistri.db`.
 
 ## Contact
 
