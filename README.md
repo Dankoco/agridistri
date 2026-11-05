@@ -29,6 +29,18 @@ copy .env.example .env
 python server.py
 ```
 
+Sur Mac ou Linux :
+
+```bash
+git clone https://github.com/Dankoco/agridistri.git
+cd agridistri
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+cp .env.example .env
+python server.py
+```
+
 Avant de lancer, remplacez `SECRET_KEY` et `JWT_SECRET_KEY` dans `.env`. Pour générer une clé :
 
 ```powershell
