@@ -1,4 +1,4 @@
-﻿from flask import Flask, request, jsonify, send_from_directory
+﻿from flask import Flask, request, jsonify, send_from_directory, abort
 from flask_cors import CORS
 from flask_jwt_extended import (
     JWTManager, create_access_token, create_refresh_token,
@@ -15,13 +15,26 @@ import sqlite3
 import os
 import re
 import html
+import math
 from dotenv import load_dotenv
 from database import DB_PATH, init_db
 
 load_dotenv()
 
-# Configuration de l'application
-app = Flask(__name__, static_url_path='', static_folder='.')
+# Configuration de l'application (static_folder=None pour empêcher l'exposition de .env, *.db, *.py)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, static_folder=None)
+
+PUBLIC_STATIC_FILES = {
+    'index.html',
+    'login.html',
+    'beneficiaire-demande.html',
+    'portail-admin.html',
+    'portail-distributeur.html',
+    'style.css',
+    'gov-theme.css',
+    'logo-mark.svg',
+}
 
 IS_PRODUCTION = os.environ.get('FLASK_ENV', 'development').lower() == 'production'
 ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
@@ -121,12 +134,15 @@ def executer_ecriture(requete, parametres=()):
 def audit_log(action, detail=None, user_id=None, username=None, status='SUCCESS'):
     """Enregistre une action sensible dans le journal d'audit."""
     try:
-        ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-        ua = request.headers.get('User-Agent', '')[:255]
+        ip = sanitiser_texte(request.remote_addr or '', max_len=64)
+        ua = sanitiser_texte(request.headers.get('User-Agent', ''), max_len=255)
+        safe_username = sanitiser_texte(username, max_len=100) if username is not None else None
+        safe_detail = sanitiser_texte(detail, max_len=300) if detail is not None else None
+        safe_action = sanitiser_texte(action, max_len=64)
         executer_ecriture(
             '''INSERT INTO audit_logs (user_id, username, action, detail, ip_address, user_agent, status)
                VALUES (?, ?, ?, ?, ?, ?, ?)''',
-            (user_id, username, action, detail, ip, ua, status)
+            (user_id, safe_username, safe_action, safe_detail, ip, ua, status)
         )
     except Exception:
         pass  # Ne jamais bloquer l'application à cause du logging
@@ -169,6 +185,17 @@ def sanitiser_texte(valeur, max_len=200):
     if valeur is None:
         return ''
     return html.escape(str(valeur).strip())[:max_len]
+
+
+def extraire_quantite_positive(valeur, max_quantite=1_000_000):
+    """Valide et retourne une quantité strictement positive et finie."""
+    try:
+        q = float(valeur)
+    except (TypeError, ValueError):
+        raise ValueError("Quantité invalide.")
+    if not math.isfinite(q) or q <= 0 or q > max_quantite:
+        raise ValueError("La quantité doit être un nombre strictement positif.")
+    return q
 
 
 def log_stock_transaction(stock_id, quantite, action, distributeur_id=None):
@@ -458,9 +485,10 @@ def get_stocks():
     return jsonify(stocks)
 
 
-# ── 6. Vérifier un bénéficiaire (public) ──────
+# ── 6. Vérifier un bénéficiaire (staff authentifié) ──────
 @app.route('/api/check-beneficiaire/<contact>', methods=['GET'])
 @limiter.limit("30 per minute")
+@distributeur_required
 def check_beneficiaire(contact):
     normalized_contact = normaliser_telephone_senegal(contact)
     farmer = charger_ligne(
@@ -476,7 +504,7 @@ def check_beneficiaire(contact):
 @app.route('/api/register-beneficiaire', methods=['POST'])
 @limiter.limit("10 per minute")
 def register():
-    data = request.json
+    data = request.json or {}
     contact = normaliser_telephone_senegal(data.get('contact'))
     numero_identite = normaliser_numero_identite(data.get('numero_identite'))
     nom = sanitiser_texte(data.get('nom'))
@@ -504,25 +532,32 @@ def register():
         return jsonify({"error": "Contact déjà existant"}), 400
 
 
-# ── 8. Soumettre une demande (public) ─────────
+# ── 8. Soumettre une demande (staff authentifié) ─────────
 @app.route('/api/demande', methods=['POST'])
 @limiter.limit("20 per minute")
+@distributeur_required
 def submit_demande():
-    data = request.json
-    agriculteur = charger_ligne(
-        'SELECT id, region FROM agriculteurs WHERE id = ?',
-        (data['agriculteur_id'],)
-    )
-    if not agriculteur:
-        return jsonify({"error": "Agriculteur non trouvé"}), 404
+    try:
+        data = request.json or {}
+        quantite = extraire_quantite_positive(data.get('quantite'))
+        agriculteur = charger_ligne(
+            'SELECT id, region FROM agriculteurs WHERE id = ?',
+            (data.get('agriculteur_id'),)
+        )
+        if not agriculteur:
+            return jsonify({"error": "Agriculteur non trouvé"}), 404
 
-    creer_demande(
-        agriculteur['id'],
-        data['stock_id'],
-        data['quantite'],
-        agriculteur['region']
-    )
-    return jsonify({"message": "Demande enregistrée"})
+        creer_demande(
+            agriculteur['id'],
+            data.get('stock_id'),
+            quantite,
+            agriculteur['region']
+        )
+        return jsonify({"message": "Demande enregistrée"})
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception:
+        return jsonify({"error": "Erreur interne du serveur"}), 500
 
 
 # ── 9. Distribuer (authentifié) ───────────────
@@ -531,38 +566,42 @@ def submit_demande():
 def distribuer():
     try:
         claims = get_jwt()
-        data = request.json
+        data = request.json or {}
+        quantite = extraire_quantite_positive(data.get('quantite'))
         conn = ouvrir_connexion()
         cur = conn.cursor()
 
         stock = conn.execute(
-            'SELECT quantite FROM stocks WHERE id = ?', (data['stock_id'],)
+            'SELECT quantite FROM stocks WHERE id = ?', (data.get('stock_id'),)
         ).fetchone()
-        if not stock or stock['quantite'] < float(data['quantite']):
+        if not stock or stock['quantite'] < quantite:
             conn.close()
             return jsonify({"error": "Stock insuffisant"}), 400
 
         cur.execute('UPDATE stocks SET quantite = quantite - ? WHERE id = ?',
-                    (data['quantite'], data['stock_id']))
+                    (quantite, data['stock_id']))
 
         distributeur_id = data.get('distributeur_id')
         if distributeur_id:
-            ajuster_stock_distributeur(distributeur_id, data['stock_id'], data['quantite'], 'remove')
+            if claims.get('role') != 'admin' and str(distributeur_id) != get_jwt_identity():
+                conn.close()
+                return jsonify({"error": "Accès refusé."}), 403
+            ajuster_stock_distributeur(distributeur_id, data['stock_id'], quantite, 'remove')
 
         cur.execute(
             'INSERT INTO distributions (agriculteur_id, stock_id, quantite) VALUES (?, ?, ?)',
-            (data['agriculteur_id'], data['stock_id'], data['quantite'])
+            (data['agriculteur_id'], data['stock_id'], quantite)
         )
         conn.commit()
         conn.close()
 
-        audit_log('DISTRIBUTION', f"Stock {data['stock_id']}: -{data['quantite']} → agriculteur {data['agriculteur_id']}",
+        audit_log('DISTRIBUTION', f"Stock {data['stock_id']}: -{quantite} → agriculteur {data['agriculteur_id']}",
                   user_id=get_jwt_identity(), username=claims.get('username'))
         return jsonify({"message": "Distribution validée"})
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except Exception:
+        return jsonify({"error": "Erreur interne du serveur"}), 500
 
 
 # ── 10. Récupérer les agriculteurs (admin) ────
@@ -593,12 +632,15 @@ def get_distributions():
 @limiter.limit("10 per minute")
 def submit_beneficiaire_demande():
     try:
-        data = request.json
+        data = request.json or {}
         contact = normaliser_telephone_senegal(data.get('contact'))
         numero_identite = normaliser_numero_identite(data.get('numero_identite'))
         nom = sanitiser_texte(data.get('nom'))
         prenom = sanitiser_texte(data.get('prenom'))
         region = sanitiser_texte(data.get('region'))
+
+        if not nom or not prenom or not region:
+            return jsonify({"error": "Nom, prénom et région sont obligatoires."}), 400
 
         if not valider_telephone_senegal(contact):
             return jsonify({"error": "Numéro de téléphone invalide. Format sénégalais requis (7XXXXXXXX)"}), 400
@@ -610,11 +652,18 @@ def submit_beneficiaire_demande():
         if numero_identite_error:
             return jsonify({"error": numero_identite_error}), 400
 
+        try:
+            quantite_demandee = extraire_quantite_positive(data.get('quantite', 0))
+        except ValueError:
+            return jsonify({"error": "La quantité demandée doit être supérieure à zéro."}), 400
+
         agriculteur = charger_ligne(
-            'SELECT id, region FROM agriculteurs WHERE contact = ?', (contact,)
+            'SELECT id, region, numero_identite FROM agriculteurs WHERE contact = ?', (contact,)
         )
 
         if agriculteur:
+            if agriculteur.get('numero_identite') and agriculteur['numero_identite'] != numero_identite:
+                return jsonify({"error": "Ce numéro de téléphone est déjà associé à une autre pièce d'identité."}), 400
             agriculteur_id = agriculteur['id']
         else:
             agriculteur_id = executer_ecriture(
@@ -624,23 +673,19 @@ def submit_beneficiaire_demande():
             )
             agriculteur = {'region': region}
 
-        stock = charger_ligne('SELECT quantite, nom, unite FROM stocks WHERE id = ?', (data['stock_id'],))
+        stock = charger_ligne('SELECT quantite, nom, unite FROM stocks WHERE id = ?', (data.get('stock_id'),))
         if not stock:
             return jsonify({"error": "Intrant introuvable"}), 404
-
-        quantite_demandee = float(data.get('quantite', 0))
-        if quantite_demandee <= 0:
-            return jsonify({"error": "La quantité demandée doit être supérieure à zéro."}), 400
 
         if quantite_demandee > stock['quantite']:
             return jsonify({
                 "error": f"Quantité demandée ({quantite_demandee} {stock['unite']}) supérieure au stock disponible ({stock['quantite']} {stock['unite']}) pour '{stock['nom']}'. Veuillez réduire la quantité."
             }), 400
 
-        creer_demande(agriculteur_id, data['stock_id'], data['quantite'], agriculteur['region'])
+        creer_demande(agriculteur_id, data['stock_id'], quantite_demandee, agriculteur['region'])
         return jsonify({"message": "Demande soumise avec succès"}), 201
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except Exception:
+        return jsonify({"error": "Erreur interne du serveur"}), 500
 
 
 # ── 13. Récupérer les demandes d'un bénéficiaire (public) ──
@@ -648,19 +693,23 @@ def submit_beneficiaire_demande():
 @limiter.limit("30 per minute")
 def get_beneficiaire_demandes():
     try:
-        contact = request.args.get('contact')
+        contact = normaliser_telephone_senegal(request.args.get('contact'))
+        if not valider_telephone_senegal(contact):
+            return jsonify([])
         demandes = charger_lignes('''
             SELECT d.id, d.statut, d.quantite, d.date_demande, d.date_validation,
+                   a.region as region,
                    s.nom as stock_nom, s.unite as stock_unite, dist.nom as distributeur_nom
             FROM demandes d
+            JOIN agriculteurs a ON d.agriculteur_id = a.id
             JOIN stocks s ON d.stock_id = s.id
             LEFT JOIN distributeurs dist ON d.distributeur_id = dist.id
-            WHERE d.agriculteur_id IN (SELECT id FROM agriculteurs WHERE contact = ?)
+            WHERE a.contact = ?
             ORDER BY d.date_demande DESC
         ''', (contact,))
         return jsonify(demandes)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except Exception:
+        return jsonify({"error": "Erreur interne du serveur"}), 500
 
 
 # ── 14. Demandes pour un distributeur (authentifié) ──
@@ -863,8 +912,8 @@ def update_distributeur_stock(distributeur_id, stock_id, action):
             if str(distributeur_id) != get_jwt_identity():
                 return jsonify({"error": "Accès refusé."}), 403
 
-        data = request.json
-        quantite = float(data.get('quantite'))
+        data = request.json or {}
+        quantite = extraire_quantite_positive(data.get('quantite'))
 
         distributeur = charger_ligne('SELECT id FROM distributeurs WHERE id = ?', (distributeur_id,))
         if not distributeur:
@@ -879,8 +928,8 @@ def update_distributeur_stock(distributeur_id, stock_id, action):
         return jsonify({"message": "Stock distributeur mis à jour"})
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except Exception:
+        return jsonify({"error": "Erreur interne du serveur"}), 500
 
 
 # ── 19. Modifier stock global (admin seulement) ──
@@ -889,15 +938,23 @@ def update_distributeur_stock(distributeur_id, stock_id, action):
 def update_stock(stock_id, action):
     try:
         claims = get_jwt()
-        data = request.json
-        quantite = float(data.get('quantite'))
+        data = request.json or {}
+        quantite = extraire_quantite_positive(data.get('quantite'))
         conn = ouvrir_connexion()
         cur = conn.cursor()
+
+        stock = cur.execute('SELECT quantite FROM stocks WHERE id = ?', (stock_id,)).fetchone()
+        if not stock:
+            conn.close()
+            return jsonify({"error": "Stock introuvable"}), 404
 
         if action == 'add':
             cur.execute('UPDATE stocks SET quantite = quantite + ? WHERE id = ?',
                        (quantite, stock_id))
         elif action == 'remove':
+            if stock['quantite'] < quantite:
+                conn.close()
+                return jsonify({"error": "Stock global insuffisant"}), 400
             cur.execute('UPDATE stocks SET quantite = quantite - ? WHERE id = ?',
                        (quantite, stock_id))
         else:
@@ -914,8 +971,8 @@ def update_stock(stock_id, action):
         return jsonify({"message": "Stock mis à jour"})
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except Exception:
+        return jsonify({"error": "Erreur interne du serveur"}), 500
 
 
 # ── 20. Statistiques Admin ────────────────────
@@ -993,13 +1050,20 @@ def admin_audit_logs():
         return jsonify({"error": str(e)}), 500
 
 
-# ── Servir les fichiers statiques ─────────────
+# ── Servir uniquement les fichiers statiques autorisés (liste blanche) ──
 @app.route('/')
 def home():
-    return app.send_static_file('index.html')
+    return send_from_directory(BASE_DIR, 'index.html')
+
+
+@app.route('/<path:filename>')
+def serve_public_static(filename):
+    if filename not in PUBLIC_STATIC_FILES:
+        abort(404)
+    return send_from_directory(BASE_DIR, filename)
 
 
 if __name__ == '__main__':
-    debug_mode = os.environ.get('FLASK_ENV', 'development') == 'development'
+    debug_mode = os.environ.get('FLASK_DEBUG', '0') == '1'
     port = int(os.environ.get('PORT', 3000))
     app.run(port=port, debug=debug_mode)

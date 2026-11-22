@@ -569,6 +569,12 @@
   }
 
   // ── Audit ────────────────────────────────────────────────────────
+  function escapeHtml(val) {
+    return String(val ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
   async function chargerAudit() {
     try {
       const res = await fetch(`${API_URL}/admin-audit-logs`, { credentials: 'same-origin' });
@@ -577,11 +583,11 @@
       document.getElementById('audit-list').innerHTML = logs.length
         ? logs.map(l => `
           <div class="audit-item">
-            <span class="audit-time">${new Date(l.timestamp).toLocaleString('fr-FR')}</span>
-            <span class="audit-action">${l.action || '—'}</span>
-            <span class="audit-user">${l.username || '—'}</span>
-            <span class="audit-ip">${l.ip || '—'}</span>
-            <span style="font-size:0.78rem;color:rgba(22,33,27,0.7);">${l.details || ''}</span>
+            <span class="audit-time">${escapeHtml(new Date(l.created_at || l.timestamp).toLocaleString('fr-FR'))}</span>
+            <span class="audit-action">${escapeHtml(l.action || '—')}</span>
+            <span class="audit-user">${escapeHtml(l.username || '—')}</span>
+            <span class="audit-ip">${escapeHtml(l.ip_address || l.ip || '—')}</span>
+            <span style="font-size:0.78rem;color:rgba(22,33,27,0.7);">${escapeHtml(l.detail || l.details || '')}</span>
           </div>
         `).join('')
         : '<div style="text-align:center;padding:2rem;color:rgba(22,33,27,0.6);">Aucun log</div>';

@@ -63,3 +63,45 @@ def test_inscription_invalide(client, contact, numero, type_piece):
 def test_contact_en_double(client):
     assert inscrire(client, '781234567', '1234567890128', 'CNI').status_code == 201
     assert inscrire(client, '781234567', '1234567890129', 'CNI').status_code == 400
+
+
+@pytest.mark.parametrize('path', ['/.env', '/agridistri.db', '/server.py', '/database.py'])
+def test_fichiers_sensibles_bloques(client, path):
+    assert client.get(path).status_code == 404
+
+
+def test_routes_staff_protegees(client):
+    assert client.get('/api/check-beneficiaire/771234567').status_code == 401
+    assert client.post('/api/demande', json={'agriculteur_id': 1, 'stock_id': 1, 'quantite': 10}).status_code == 401
+
+
+@pytest.mark.parametrize('quantite_invalide', [-10, 0, 'nan', 'inf', 'abc'])
+def test_demande_beneficiaire_quantite_invalide(client, quantite_invalide):
+    res = client.post('/api/demandes-beneficiaire', json={
+        'nom': 'Test',
+        'prenom': 'Securite',
+        'region': 'Dakar',
+        'contact': '779998877',
+        'numero_identite': '1234567890199',
+        'type_piece': 'CNI',
+        'stock_id': 1,
+        'quantite': quantite_invalide,
+    })
+    assert res.status_code == 400
+
+
+def test_demande_beneficiaire_anti_usurpation_cni(client):
+    payload = {
+        'nom': 'Titulaire',
+        'prenom': 'Legitime',
+        'region': 'Dakar',
+        'contact': '778887766',
+        'numero_identite': '1234567890188',
+        'type_piece': 'CNI',
+        'stock_id': 1,
+        'quantite': 5,
+    }
+    assert client.post('/api/demandes-beneficiaire', json=payload).status_code == 201
+    usurpation = dict(payload, numero_identite='9999999999999')
+    assert client.post('/api/demandes-beneficiaire', json=usurpation).status_code == 400
+
