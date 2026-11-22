@@ -11,9 +11,11 @@ Application web de distribution d'intrants agricoles (semences, engrais, pestici
 
 ## Captures d'écran
 
-![Connexion](screenshots/login.jpg)
+![Accueil](screenshots/accueil.png)
 
-![Portail bénéficiaire](screenshots/beneficiaire.jpg)
+![Connexion](screenshots/login.png)
+
+![Portail bénéficiaire](screenshots/beneficiaire.png)
 
 ## Lancer le projet
 

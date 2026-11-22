@@ -6,90 +6,90 @@
   <title>Portail Distributeur | AgriDistri</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     body { padding: 0; }
     .aurora { position:fixed;inset:0;pointer-events:none;z-index:0; }
-    .aurora::before { content:'';position:absolute;width:70vw;height:70vw;top:-30vw;left:-20vw;background:radial-gradient(circle,rgba(0,210,122,0.05) 0%,transparent 65%);animation:drift 22s ease-in-out infinite alternate; }
-    .aurora::after  { content:'';position:absolute;width:40vw;height:40vw;bottom:-5vw;right:-5vw;background:radial-gradient(circle,rgba(0,130,80,0.04) 0%,transparent 65%);animation:drift 28s ease-in-out infinite alternate-reverse; }
+    .aurora::before { content:'';position:absolute;width:70vw;height:70vw;top:-30vw;left:-20vw;background:radial-gradient(circle,rgba(46,158,82,0.05) 0%,transparent 65%);animation:drift 22s ease-in-out infinite alternate; }
+    .aurora::after  { content:'';position:absolute;width:40vw;height:40vw;bottom:-5vw;right:-5vw;background:radial-gradient(circle,rgba(46,158,82,0.04) 0%,transparent 65%);animation:drift 28s ease-in-out infinite alternate-reverse; }
     @keyframes drift { from{transform:translate(0,0) scale(1);}to{transform:translate(3vw,5vw) scale(1.1);} }
 
     /* Demand cards */
     .dem-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1.25rem; padding: 1.5rem;
       margin-bottom: 1rem;
       transition: border-color 0.2s, transform 0.2s;
     }
-    .dem-card:hover { border-color: rgba(0,210,122,0.2); transform: translateX(2px); }
+    .dem-card:hover { border-color: rgba(46,158,82,0.2); transform: translateX(2px); }
     .dem-top { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1rem; }
     .dem-name { font-weight:700; font-size:1rem; }
-    .dem-contact { font-size:0.78rem; color:rgba(224,240,234,0.45); margin-top:0.2rem; font-family:monospace; }
+    .dem-contact { font-size:0.78rem; color:rgba(22,33,27,0.75); margin-top:0.2rem; font-family:monospace; }
 
     .dem-meta {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
       gap: 0.75rem; padding: 1rem;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.04);
+      background: rgba(22,45,33,0.04);
+      border: 1px solid rgba(255,255,255,0.85);
       border-radius: 0.875rem;
       margin-bottom: 1rem;
     }
-    .dem-field label { display:block;font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(224,240,234,0.3);margin-bottom:0.2rem; }
+    .dem-field label { display:block;font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(22,33,27,0.6);margin-bottom:0.2rem; }
     .dem-field span  { font-size:0.85rem;font-weight:500; }
 
     .dem-actions { display:flex; gap:0.6rem; justify-content:flex-end; }
 
     .btn-val {
-      background: rgba(0,210,122,0.12); color: #00D27A;
-      border: 1px solid rgba(0,210,122,0.25);
+      background: rgba(46,158,82,0.12); color: #2E9E52;
+      border: 1px solid rgba(46,158,82,0.25);
       padding: 0.5rem 1.1rem; border-radius: 0.625rem;
       font-size: 0.8rem; font-weight: 700;
-      cursor: pointer; font-family:'Inter',sans-serif;
+      cursor: pointer; font-family:'Public Sans',sans-serif;
       transition: all 0.2s; display:flex;align-items:center;gap:0.35rem;
     }
-    .btn-val:hover { background: rgba(0,210,122,0.22); box-shadow: 0 4px 16px rgba(0,210,122,0.2); }
+    .btn-val:hover { background: rgba(46,158,82,0.22); box-shadow: 0 4px 16px rgba(46,158,82,0.2); }
 
     .btn-rej {
-      background: rgba(239,68,68,0.1); color: #EF4444;
-      border: 1px solid rgba(239,68,68,0.2);
+      background: rgba(207,46,46,0.1); color: #CF2E2E;
+      border: 1px solid rgba(207,46,46,0.2);
       padding: 0.5rem 1.1rem; border-radius: 0.625rem;
       font-size: 0.8rem; font-weight: 700;
-      cursor: pointer; font-family:'Inter',sans-serif;
+      cursor: pointer; font-family:'Public Sans',sans-serif;
       transition: all 0.2s; display:flex;align-items:center;gap:0.35rem;
     }
-    .btn-rej:hover { background: rgba(239,68,68,0.2); }
+    .btn-rej:hover { background: rgba(207,46,46,0.2); }
 
     /* Stock card */
     .stock-item {
       display: flex; align-items: center; justify-content: space-between;
       padding: 1rem 1.25rem;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(22,45,33,0.04);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1rem; margin-bottom: 0.75rem;
       transition: border-color 0.2s;
     }
-    .stock-item:hover { border-color: rgba(0,210,122,0.15); }
+    .stock-item:hover { border-color: rgba(46,158,82,0.15); }
     .stock-item-left { display:flex;align-items:center;gap:0.875rem; }
-    .stock-item-icon { width:40px;height:40px;border-radius:0.75rem;background:rgba(0,210,122,0.1);display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
+    .stock-item-icon { width:40px;height:40px;border-radius:0.75rem;background:rgba(46,158,82,0.1);display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
     .stock-item-name { font-weight:700;font-size:0.875rem; }
-    .stock-item-type { font-size:0.72rem;color:rgba(224,240,234,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.1rem; }
-    .stock-qty { font-size:1.5rem;font-weight:800;color:#00D27A;letter-spacing:-0.02em; }
-    .stock-unit { font-size:0.72rem;color:rgba(224,240,234,0.35);margin-top:0.1rem;text-align:right; }
+    .stock-item-type { font-size:0.72rem;color:rgba(22,33,27,0.7);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.1rem; }
+    .stock-qty { font-size:1.5rem;font-weight:800;color:#2E9E52;letter-spacing:-0.02em; }
+    .stock-unit { font-size:0.72rem;color:rgba(22,33,27,0.65);margin-top:0.1rem;text-align:right; }
 
     /* Form inputs */
     .f-select, .f-input-sm {
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.85); border: 1px solid rgba(22,45,33,0.14);
       border-radius: 0.75rem; padding: 0.7rem 0.875rem;
-      color: #E0F0EA; font-size: 0.875rem;
-      font-family:'Inter',sans-serif; outline:none; width:100%;
+      color: #16211B; font-size: 0.875rem;
+      font-family:'Public Sans',sans-serif; outline:none; width:100%;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .f-select:focus, .f-input-sm:focus {
-      border-color: #00D27A; box-shadow: 0 0 0 3px rgba(0,210,122,0.1);
+      border-color: #2E9E52; box-shadow: 0 0 0 3px rgba(46,158,82,0.1);
     }
-    .f-select option { background: #071318; }
+    .f-select option { background: #FFFFFF; }
 
     .stock-msg {
       display:none; padding:0.75rem 1rem;
@@ -97,20 +97,21 @@
       border:1px solid; margin-top:0.75rem; align-items:center; gap:0.5rem;
     }
     .stock-msg.show { display:flex; }
-    .stock-msg.success { background:rgba(0,210,122,0.08);color:#00D27A;border-color:rgba(0,210,122,0.2); }
-    .stock-msg.error   { background:rgba(239,68,68,0.08);color:#EF4444;border-color:rgba(239,68,68,0.2); }
+    .stock-msg.success { background:rgba(46,158,82,0.08);color:#2E9E52;border-color:rgba(46,158,82,0.2); }
+    .stock-msg.error   { background:rgba(207,46,46,0.08);color:#CF2E2E;border-color:rgba(207,46,46,0.2); }
 
-    .badge-pending { background:rgba(245,166,35,0.12);color:#F5A623;border:1px solid rgba(245,166,35,0.25);display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
+    .badge-pending { background:rgba(168,90,44,0.12);color:#A85A2C;border:1px solid rgba(168,90,44,0.25);display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
     .badge-pending::before { content:'●';font-size:0.5rem; }
-    .badge-validee { background:rgba(0,210,122,0.12);color:#00D27A;border:1px solid rgba(0,210,122,0.25);display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
+    .badge-validee { background:rgba(46,158,82,0.12);color:#2E9E52;border:1px solid rgba(46,158,82,0.25);display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em; }
     .badge-validee::before { content:'●';font-size:0.5rem; }
 
-    .empty { text-align:center;padding:3rem;color:rgba(224,240,234,0.3);font-size:0.9rem; }
+    .empty { text-align:center;padding:3rem;color:rgba(22,33,27,0.6);font-size:0.9rem; }
     .empty-icon { font-size:2.5rem;display:block;margin-bottom:0.75rem;opacity:0.3; }
 
     .section-h2 { font-size:1.2rem;font-weight:700;margin-bottom:0.25rem; }
-    .section-sub { font-size:0.8rem;color:rgba(224,240,234,0.4);margin-bottom:1.5rem; }
+    .section-sub { font-size:0.8rem;color:rgba(22,33,27,0.7);margin-bottom:1.5rem; }
   </style>
+  <link rel="stylesheet" href="gov-theme.css">
 </head>
 <body>
 <div class="aurora"></div>
@@ -149,8 +150,8 @@
     <div class="sidebar-section-label">Zone</div>
     <ul class="sidebar-nav">
       <li>
-        <div style="padding:0.6rem 0.875rem;font-size:0.82rem;color:rgba(224,240,234,0.45);">
-          <div style="font-weight:600;color:#00D27A;" id="user-region-label">—</div>
+        <div style="padding:0.6rem 0.875rem;font-size:0.82rem;color:rgba(22,33,27,0.75);">
+          <div style="font-weight:600;color:#2E9E52;" id="user-region-label">—</div>
           <div style="font-size:0.72rem;margin-top:0.15rem;">Région assignée</div>
         </div>
       </li>
@@ -185,8 +186,8 @@
         <div class="topbar-subtitle" id="topbar-sub">Validez ou rejetez les demandes de votre zone</div>
       </div>
       <div class="topbar-actions">
-        <span id="topbar-clock" style="font-size:0.78rem;color:rgba(224,240,234,0.4);"></span>
-        <button onclick="refreshAll()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#E0F0EA;padding:0.45rem 0.875rem;border-radius:0.625rem;font-size:0.8rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(0,210,122,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+        <span id="topbar-clock" style="font-size:0.78rem;color:rgba(22,33,27,0.7);"></span>
+        <button onclick="refreshAll()" style="background:rgba(22,45,33,0.14);border:1px solid rgba(22,45,33,0.14);color:#16211B;padding:0.45rem 0.875rem;border-radius:0.625rem;font-size:0.8rem;cursor:pointer;font-family:'Public Sans',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(46,158,82,0.3)'" onmouseout="this.style.borderColor='rgba(22,45,33,0.14)'">
           ↻ Actualiser
         </button>
       </div>
@@ -230,13 +231,13 @@
           <form id="update-stock-form">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
               <div style="display:flex;flex-direction:column;gap:0.4rem;">
-                <label style="font-size:0.775rem;font-weight:600;color:rgba(224,240,234,0.5);text-transform:uppercase;letter-spacing:0.08em;">Intrant</label>
+                <label style="font-size:0.775rem;font-weight:600;color:rgba(22,33,27,0.8);text-transform:uppercase;letter-spacing:0.08em;">Intrant</label>
                 <select class="f-select" id="stock-select" required>
                   <option value="">-- Sélectionner --</option>
                 </select>
               </div>
               <div style="display:flex;flex-direction:column;gap:0.4rem;">
-                <label style="font-size:0.775rem;font-weight:600;color:rgba(224,240,234,0.5);text-transform:uppercase;letter-spacing:0.08em;">Action</label>
+                <label style="font-size:0.775rem;font-weight:600;color:rgba(22,33,27,0.8);text-transform:uppercase;letter-spacing:0.08em;">Action</label>
                 <select class="f-select" id="stock-action" required>
                   <option value="">-- Sélectionner --</option>
                   <option value="add">➕ Ajouter du stock</option>
@@ -246,10 +247,10 @@
             </div>
             <div style="display:flex;gap:1rem;align-items:flex-end;">
               <div style="flex:1;display:flex;flex-direction:column;gap:0.4rem;">
-                <label style="font-size:0.775rem;font-weight:600;color:rgba(224,240,234,0.5);text-transform:uppercase;letter-spacing:0.08em;">Quantité</label>
+                <label style="font-size:0.775rem;font-weight:600;color:rgba(22,33,27,0.8);text-transform:uppercase;letter-spacing:0.08em;">Quantité</label>
                 <input class="f-input-sm" type="number" id="stock-quantity" step="0.1" min="0.1" placeholder="Ex: 50" required>
               </div>
-              <button type="submit" style="background:#00D27A;color:#030B0D;border:none;border-radius:0.75rem;padding:0.7rem 1.5rem;font-weight:700;font-size:0.875rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='#00F090'" onmouseout="this.style.background='#00D27A'">
+              <button type="submit" style="background:#2E9E52;color:#FFFFFF;border:none;border-radius:0.75rem;padding:0.7rem 1.5rem;font-weight:700;font-size:0.875rem;cursor:pointer;font-family:'Public Sans',sans-serif;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='#24803F'" onmouseout="this.style.background='#2E9E52'">
                 Mettre à jour
               </button>
             </div>
@@ -334,7 +335,7 @@
           </div>
           <div class="dem-meta">
             <div class="dem-field"><label>Intrant</label><span>${d.stock_nom}</span></div>
-            <div class="dem-field"><label>Quantité</label><span style="color:#00D27A;font-weight:700;">${d.quantite} ${d.stock_unite}</span></div>
+            <div class="dem-field"><label>Quantité</label><span style="color:#2E9E52;font-weight:700;">${d.quantite} ${d.stock_unite}</span></div>
             <div class="dem-field"><label>Région</label><span>${d.region}</span></div>
             <div class="dem-field"><label>Date</label><span>${new Date(d.date_demande).toLocaleDateString('fr-FR')}</span></div>
             ${d.type_piece ? `<div class="dem-field"><label>Pièce</label><span>${d.type_piece}</span></div>` : ''}
@@ -425,7 +426,7 @@
           </div>
           <div class="dem-meta">
             <div class="dem-field"><label>Intrant</label><span>${d.stock_nom}</span></div>
-            <div class="dem-field"><label>Quantité livrée</label><span style="color:#00D27A;font-weight:700;">${d.quantite} ${d.stock_unite}</span></div>
+            <div class="dem-field"><label>Quantité livrée</label><span style="color:#2E9E52;font-weight:700;">${d.quantite} ${d.stock_unite}</span></div>
             ${d.date_validation ? `<div class="dem-field"><label>Validée le</label><span>${new Date(d.date_validation).toLocaleDateString('fr-FR')}</span></div>` : ''}
           </div>
         </div>

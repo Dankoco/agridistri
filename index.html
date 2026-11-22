@@ -9,7 +9,7 @@
     content="AgriDistri simplifie la gestion et la distribution d'intrants agricoles au Sénégal. Plateforme sécurisée pour bénéficiaires, distributeurs et administrateurs.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Public+Sans:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
   <style>
     /* ── Base ── */
@@ -26,9 +26,9 @@
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: #030B0D;
-      color: #E0F0EA;
+      font-family: 'Public Sans', system-ui, sans-serif;
+      background: #D6EADB;
+      color: #16211B;
       line-height: 1.65;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -54,7 +54,7 @@
       height: 80vw;
       top: -30vw;
       left: -20vw;
-      background: radial-gradient(circle, rgba(0, 210, 122, 0.065) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(46,158,82,0.065) 0%, transparent 65%);
       animation: drift 20s ease-in-out infinite alternate;
     }
 
@@ -65,7 +65,7 @@
       height: 50vw;
       bottom: -5vw;
       right: -10vw;
-      background: radial-gradient(circle, rgba(0, 130, 80, 0.05) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(46,158,82,0.05) 0%, transparent 65%);
       animation: drift 26s ease-in-out infinite alternate-reverse;
     }
 
@@ -86,10 +86,10 @@
       left: 0;
       right: 0;
       z-index: 100;
-      background: rgba(3, 11, 13, 0.7);
+      background: rgba(214,234,219,0.7);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid rgba(0, 210, 122, 0.08);
+      border-bottom: 1px solid rgba(46,158,82,0.08);
       transition: background 0.3s;
     }
 
@@ -111,13 +111,13 @@
 
     .nav-brand img {
       height: 34px;
-      filter: drop-shadow(0 0 8px rgba(0, 210, 122, 0.5));
+      filter: drop-shadow(0 0 8px rgba(46,158,82,0.5));
     }
 
     .nav-brand-name {
       font-weight: 800;
       font-size: 1.1rem;
-      color: #E0F0EA;
+      color: #16211B;
     }
 
     .nav-links {
@@ -133,7 +133,7 @@
     }
 
     .nav-links a {
-      color: rgba(224, 240, 234, 0.6);
+      color: rgba(22,33,27,0.85);
       font-size: 0.875rem;
       font-weight: 500;
       padding: 0.45rem 0.875rem;
@@ -142,21 +142,21 @@
     }
 
     .nav-links a:hover {
-      color: #E0F0EA;
-      background: rgba(255, 255, 255, 0.05);
+      color: #16211B;
+      background: rgba(22,45,33,0.14);
     }
 
     .nav-cta {
-      background: #00D27A;
-      color: #030B0D !important;
+      background: #2E9E52;
+      color: #FFFFFF !important;
       font-weight: 700 !important;
-      box-shadow: 0 0 20px rgba(0, 210, 122, 0.3);
+      box-shadow: 0 0 20px rgba(46,158,82,0.3);
     }
 
     .nav-cta:hover {
-      background: #00F090 !important;
+      background: #24803F !important;
       transform: translateY(-1px);
-      box-shadow: 0 4px 24px rgba(0, 210, 122, 0.45) !important;
+      box-shadow: 0 4px 24px rgba(46,158,82,0.45) !important;
     }
 
     /* ── Hero ── */
@@ -175,7 +175,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-image: radial-gradient(circle, rgba(22,45,33,0.04) 1px, transparent 1px);
       background-size: 28px 28px;
       pointer-events: none;
     }
@@ -190,9 +190,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(0, 210, 122, 0.1);
-      border: 1px solid rgba(0, 210, 122, 0.3);
-      color: #00D27A;
+      background: rgba(46,158,82,0.1);
+      border: 1px solid rgba(46,158,82,0.3);
+      color: #2E9E52;
       padding: 0.35rem 1.1rem;
       border-radius: 999px;
       font-size: 0.78rem;
@@ -206,7 +206,7 @@
     .hero-pill-dot {
       width: 6px;
       height: 6px;
-      background: #00D27A;
+      background: #2E9E52;
       border-radius: 50%;
       animation: pulse 2s infinite;
     }
@@ -229,7 +229,7 @@
       width: 90px;
       height: auto;
       margin-bottom: 2rem;
-      filter: drop-shadow(0 0 30px rgba(0, 210, 122, 0.35));
+      filter: drop-shadow(0 0 30px rgba(46,158,82,0.35));
       animation: float 5s ease-in-out infinite;
     }
 
@@ -255,7 +255,7 @@
     }
 
     .hero-h1 .grad {
-      background: linear-gradient(135deg, #00D27A 0%, #00F0B0 50%, #7FFFD4 100%);
+      background: linear-gradient(135deg, #2E9E52 0%, #3D7A5C 50%, #3D7A5C 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -263,7 +263,7 @@
 
     .hero-desc {
       font-size: 1.15rem;
-      color: rgba(224, 240, 234, 0.6);
+      color: rgba(22,33,27,0.85);
       max-width: 600px;
       margin: 0 auto 2.75rem;
       line-height: 1.8;
@@ -279,13 +279,13 @@
     }
 
     .btn-primary-hero {
-      background: #00D27A;
-      color: #030B0D;
+      background: #2E9E52;
+      color: #FFFFFF;
       padding: 0.9rem 2.25rem;
       border-radius: 0.875rem;
       font-weight: 800;
       font-size: 1rem;
-      box-shadow: 0 0 0 0 rgba(0, 210, 122, 0), 0 4px 20px rgba(0, 210, 122, 0.3);
+      box-shadow: 0 0 0 0 rgba(46,158,82,0), 0 4px 20px rgba(46,158,82,0.3);
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
@@ -293,15 +293,15 @@
     }
 
     .btn-primary-hero:hover {
-      background: #00F090;
+      background: #24803F;
       transform: translateY(-3px);
-      box-shadow: 0 0 0 4px rgba(0, 210, 122, 0.1), 0 8px 32px rgba(0, 210, 122, 0.45);
+      box-shadow: 0 0 0 4px rgba(46,158,82,0.1), 0 8px 32px rgba(46,158,82,0.45);
     }
 
     .btn-outline-hero {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #E0F0EA;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.18);
+      color: #16211B;
       padding: 0.9rem 2.25rem;
       border-radius: 0.875rem;
       font-weight: 600;
@@ -314,8 +314,8 @@
     }
 
     .btn-outline-hero:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(0, 210, 122, 0.3);
+      background: rgba(22,45,33,0.14);
+      border-color: rgba(46,158,82,0.3);
       transform: translateY(-2px);
     }
 
@@ -335,14 +335,14 @@
     .hero-stat-num {
       font-size: 2rem;
       font-weight: 800;
-      color: #00D27A;
+      color: #2E9E52;
       letter-spacing: -0.03em;
       line-height: 1;
     }
 
     .hero-stat-lbl {
       font-size: 0.78rem;
-      color: rgba(224, 240, 234, 0.5);
+      color: rgba(22,33,27,0.8);
       margin-top: 0.3rem;
       font-weight: 500;
     }
@@ -350,7 +350,7 @@
     .hero-sep {
       width: 1px;
       height: 40px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(22,45,33,0.18);
     }
 
     /* ── Sections ── */
@@ -370,7 +370,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      color: #00D27A;
+      color: #2E9E52;
       margin-bottom: 0.875rem;
       display: flex;
       align-items: center;
@@ -381,7 +381,7 @@
       content: '';
       width: 16px;
       height: 1px;
-      background: #00D27A;
+      background: #2E9E52;
     }
 
     .section-title {
@@ -393,7 +393,7 @@
     }
 
     .section-desc {
-      color: rgba(224, 240, 234, 0.55);
+      color: rgba(22,33,27,0.85);
       font-size: 1.05rem;
       max-width: 560px;
       line-height: 1.8;
@@ -410,10 +410,10 @@
     /* ── Portals Grid ── */
     .portals-bg {
       background:
-        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0, 210, 122, 0.07) 0%, transparent 70%),
-        rgba(7, 19, 24, 0.8);
-      border-top: 1px solid rgba(0, 210, 122, 0.07);
-      border-bottom: 1px solid rgba(0, 210, 122, 0.07);
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(46,158,82,0.07) 0%, transparent 70%),
+        rgba(255,255,255,0.8);
+      border-top: 1px solid rgba(46,158,82,0.07);
+      border-bottom: 1px solid rgba(46,158,82,0.07);
     }
 
     .portals-grid {
@@ -424,8 +424,8 @@
     }
 
     .portal-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1.5rem;
       padding: 2.25rem 2rem;
       backdrop-filter: blur(16px);
@@ -442,7 +442,7 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, #00D27A, transparent);
+      background: linear-gradient(90deg, transparent, #2E9E52, transparent);
       opacity: 0;
       transition: opacity 0.25s;
     }
@@ -455,14 +455,14 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 210, 122, 0.08), transparent 70%);
+      background: radial-gradient(circle, rgba(46,158,82,0.08), transparent 70%);
       transition: transform 0.4s;
     }
 
     .portal-card:hover {
       transform: translateY(-5px);
-      border-color: rgba(0, 210, 122, 0.25);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 210, 122, 0.05);
+      border-color: rgba(46,158,82,0.25);
+      box-shadow: 0 20px 60px rgba(15,45,34,0.12), 0 0 40px rgba(46,158,82,0.05);
     }
 
     .portal-card:hover::before {
@@ -476,8 +476,8 @@
     .portal-icon-wrap {
       width: 54px;
       height: 54px;
-      background: rgba(0, 210, 122, 0.1);
-      border: 1px solid rgba(0, 210, 122, 0.2);
+      background: rgba(46,158,82,0.1);
+      border: 1px solid rgba(46,158,82,0.2);
       border-radius: 1rem;
       display: flex;
       align-items: center;
@@ -493,7 +493,7 @@
     }
 
     .portal-card p {
-      color: rgba(224, 240, 234, 0.55);
+      color: rgba(22,33,27,0.85);
       font-size: 0.9rem;
       line-height: 1.65;
     }
@@ -502,7 +502,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      color: #00D27A;
+      color: #2E9E52;
       font-size: 0.85rem;
       font-weight: 700;
       margin-top: 1.5rem;
@@ -515,7 +515,7 @@
 
     /* ── Features ── */
     .features-bg {
-      background: rgba(7, 19, 24, 0.6);
+      background: rgba(255,255,255,0.6);
     }
 
     .features-grid {
@@ -526,22 +526,22 @@
     }
 
     .feature-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1.25rem;
       padding: 1.75rem;
       transition: border-color 0.25s, transform 0.25s;
     }
 
     .feature-card:hover {
-      border-color: rgba(0, 210, 122, 0.2);
+      border-color: rgba(46,158,82,0.2);
       transform: translateY(-2px);
     }
 
     .feature-icon {
       width: 44px;
       height: 44px;
-      background: rgba(0, 210, 122, 0.1);
+      background: rgba(46,158,82,0.1);
       border-radius: 0.75rem;
       display: flex;
       align-items: center;
@@ -557,7 +557,7 @@
     }
 
     .feature-card p {
-      color: rgba(224, 240, 234, 0.5);
+      color: rgba(22,33,27,0.8);
       font-size: 0.85rem;
       line-height: 1.65;
     }
@@ -578,7 +578,7 @@
       left: 60px;
       right: 60px;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(0, 210, 122, 0.2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(46,158,82,0.2), transparent);
     }
 
     @media (max-width: 640px) {
@@ -588,8 +588,8 @@
     }
 
     .step-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1.25rem;
       padding: 2rem 1.5rem;
       text-align: center;
@@ -599,7 +599,7 @@
     }
 
     .step-card:hover {
-      border-color: rgba(0, 210, 122, 0.25);
+      border-color: rgba(46,158,82,0.25);
       transform: translateY(-3px);
     }
 
@@ -607,15 +607,15 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #00A860, #00D27A);
-      color: #030B0D;
+      background: linear-gradient(135deg, #24803F, #2E9E52);
+      color: #FFFFFF;
       font-weight: 900;
       font-size: 1.1rem;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 1.25rem;
-      box-shadow: 0 4px 20px rgba(0, 210, 122, 0.4);
+      box-shadow: 0 4px 20px rgba(46,158,82,0.4);
     }
 
     .step-card h4 {
@@ -625,7 +625,7 @@
     }
 
     .step-card p {
-      color: rgba(224, 240, 234, 0.5);
+      color: rgba(22,33,27,0.8);
       font-size: 0.85rem;
       line-height: 1.65;
     }
@@ -658,25 +658,25 @@
       align-items: flex-start;
       padding: 1rem;
       border-radius: 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(22,45,33,0.14);
+      background: rgba(22,45,33,0.04);
       transition: border-color 0.25s;
     }
 
     .security-item:hover {
-      border-color: rgba(0, 210, 122, 0.15);
+      border-color: rgba(46,158,82,0.15);
     }
 
     .security-check {
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: rgba(0, 210, 122, 0.12);
-      border: 1px solid rgba(0, 210, 122, 0.25);
+      background: rgba(46,158,82,0.12);
+      border: 1px solid rgba(46,158,82,0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #00D27A;
+      color: #2E9E52;
       font-size: 0.8rem;
       flex-shrink: 0;
     }
@@ -689,7 +689,7 @@
 
     .security-text p {
       font-size: 0.8rem;
-      color: rgba(224, 240, 234, 0.5);
+      color: rgba(22,33,27,0.8);
     }
 
     .security-shield {
@@ -699,8 +699,8 @@
     }
 
     .shield-badge {
-      background: rgba(0, 210, 122, 0.06);
-      border: 1px solid rgba(0, 210, 122, 0.12);
+      background: rgba(46,158,82,0.06);
+      border: 1px solid rgba(46,158,82,0.12);
       border-radius: 1.5rem;
       padding: 2rem;
       text-align: center;
@@ -715,26 +715,26 @@
     .shield-title {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #00D27A;
+      color: #2E9E52;
     }
 
     .shield-sub {
       font-size: 0.8rem;
-      color: rgba(224, 240, 234, 0.5);
+      color: rgba(22,33,27,0.8);
       margin-top: 0.3rem;
     }
 
     /* ── CTA ── */
     .cta-bg {
-      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0, 210, 122, 0.08) 0%, transparent 70%);
-      border-top: 1px solid rgba(0, 210, 122, 0.07);
+      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(46,158,82,0.08) 0%, transparent 70%);
+      border-top: 1px solid rgba(46,158,82,0.07);
     }
 
     .cta-card {
       max-width: 700px;
       margin: 0 auto;
-      background: rgba(0, 210, 122, 0.05);
-      border: 1px solid rgba(0, 210, 122, 0.18);
+      background: rgba(46,158,82,0.05);
+      border: 1px solid rgba(46,158,82,0.18);
       border-radius: 2rem;
       padding: 4rem 2.5rem;
       text-align: center;
@@ -749,7 +749,7 @@
     }
 
     .cta-card p {
-      color: rgba(224, 240, 234, 0.55);
+      color: rgba(22,33,27,0.85);
       font-size: 1rem;
       line-height: 1.75;
       margin-bottom: 2.25rem;
@@ -764,7 +764,7 @@
 
     /* ── Footer ── */
     .footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(22,45,33,0.14);
       padding: 2.5rem 1.5rem;
       position: relative;
       z-index: 1;
@@ -785,7 +785,7 @@
       align-items: center;
       gap: 0.6rem;
       font-weight: 700;
-      color: #00D27A;
+      color: #2E9E52;
     }
 
     .footer-brand img {
@@ -794,7 +794,7 @@
 
     .footer-copy {
       font-size: 0.8rem;
-      color: rgba(224, 240, 234, 0.35);
+      color: rgba(22,33,27,0.65);
     }
 
     .footer-links {
@@ -804,12 +804,12 @@
 
     .footer-links a {
       font-size: 0.8rem;
-      color: rgba(224, 240, 234, 0.4);
+      color: rgba(22,33,27,0.7);
       transition: color 0.2s;
     }
 
     .footer-links a:hover {
-      color: #E0F0EA;
+      color: #16211B;
     }
 
     /* ── Animations ── */
@@ -836,10 +836,18 @@
       transform: translateY(0);
     }
   </style>
+  <link rel="stylesheet" href="gov-theme.css">
 </head>
 
 <body>
   <div class="aurora"></div>
+
+  <div class="gov-topbar">
+    <div class="gov-topbar-inner">
+      <span>AgriDistri · Distribution d'intrants agricoles · Sénégal</span>
+      <span><a href="mailto:bdankoco@gmail.com">Contact</a><a href="login.html">Espace professionnel</a></span>
+    </div>
+  </div>
 
   <!-- Navigation -->
   <nav class="nav" id="nav">
@@ -1029,22 +1037,22 @@
             <div class="shield-badge" style="padding: 1.25rem;">
               <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🔑</div>
               <div style="font-size: 0.8rem; font-weight: 700;">scrypt</div>
-              <div style="font-size: 0.72rem; color: rgba(224,240,234,0.5);">Hashage mdp</div>
+              <div style="font-size: 0.72rem; color: rgba(22,33,27,0.8);">Hashage mdp</div>
             </div>
             <div class="shield-badge" style="padding: 1.25rem;">
               <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🌐</div>
               <div style="font-size: 0.8rem; font-weight: 700;">CORS</div>
-              <div style="font-size: 0.72rem; color: rgba(224,240,234,0.5);">Origines restreintes</div>
+              <div style="font-size: 0.72rem; color: rgba(22,33,27,0.8);">Origines restreintes</div>
             </div>
             <div class="shield-badge" style="padding: 1.25rem;">
               <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">👥</div>
               <div style="font-size: 0.8rem; font-weight: 700;">RBAC</div>
-              <div style="font-size: 0.72rem; color: rgba(224,240,234,0.5);">Rôles stricts</div>
+              <div style="font-size: 0.72rem; color: rgba(22,33,27,0.8);">Rôles stricts</div>
             </div>
             <div class="shield-badge" style="padding: 1.25rem;">
               <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">📋</div>
               <div style="font-size: 0.8rem; font-weight: 700;">Audit</div>
-              <div style="font-size: 0.72rem; color: rgba(224,240,234,0.5);">Traçabilité totale</div>
+              <div style="font-size: 0.72rem; color: rgba(22,33,27,0.8);">Traçabilité totale</div>
             </div>
           </div>
         </div>
@@ -1132,7 +1140,7 @@
     // Nav scroll effect
     window.addEventListener('scroll', () => {
       document.getElementById('nav').style.background =
-        window.scrollY > 30 ? 'rgba(3,11,13,0.97)' : 'rgba(3,11,13,0.7)';
+        window.scrollY > 30 ? 'rgba(214,234,219,0.97)' : 'rgba(214,234,219,0.7)';
     });
   </script>
 </body>

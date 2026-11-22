@@ -7,10 +7,10 @@
   <meta name="description" content="Connexion sécurisée au portail AgriDistri pour administrateurs et distributeurs.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    body { padding: 0; background: #030B0D; }
+    body { padding: 0; background: #D6EADB; }
 
     /* ── Login Split Layout ── */
     .login-shell {
@@ -26,8 +26,8 @@
 
     /* ── Left Side ── */
     .login-side {
-      background: #071318;
-      border-right: 1px solid rgba(255,255,255,0.05);
+      background: #FFFFFF;
+      border-right: 1px solid rgba(22,45,33,0.14);
       padding: 3rem 3.5rem;
       display: flex; flex-direction: column;
       position: relative; overflow: hidden;
@@ -37,7 +37,7 @@
       position: absolute;
       width: 70%; height: 70%;
       bottom: -20%; left: -15%;
-      background: radial-gradient(circle, rgba(0,210,122,0.09) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(46,158,82,0.09) 0%, transparent 70%);
       pointer-events: none;
     }
     .login-side::after {
@@ -45,16 +45,16 @@
       position: absolute;
       width: 40%; height: 40%;
       top: 5%; right: -5%;
-      background: radial-gradient(circle, rgba(0,130,80,0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(46,158,82,0.06) 0%, transparent 70%);
       pointer-events: none;
     }
     .side-brand {
       display: flex; align-items: center; gap: 1rem;
       position: relative; z-index: 1;
     }
-    .side-brand img { height: 38px; filter: drop-shadow(0 0 10px rgba(0,210,122,0.5)); }
+    .side-brand img { height: 38px; filter: drop-shadow(0 0 10px rgba(46,158,82,0.5)); }
     .side-brand-name { font-size: 1.2rem; font-weight: 800; }
-    .side-brand-tag  { font-size: 0.72rem; color: rgba(224,240,234,0.5); margin-top: 0.15rem; }
+    .side-brand-tag  { font-size: 0.72rem; color: rgba(22,33,27,0.8); margin-top: 0.15rem; }
 
     .side-hero {
       flex: 1; display: flex; flex-direction: column;
@@ -66,9 +66,9 @@
       font-weight: 800; letter-spacing: -0.04em;
       line-height: 1.2; margin-bottom: 1rem;
     }
-    .side-tagline .vert { color: #00D27A; }
+    .side-tagline .vert { color: #2E9E52; }
     .side-sub {
-      color: rgba(224,240,234,0.5); font-size: 0.95rem;
+      color: rgba(22,33,27,0.8); font-size: 0.95rem;
       line-height: 1.75; max-width: 420px;
     }
 
@@ -76,24 +76,24 @@
     .role-card {
       display: flex; align-items: center; gap: 1rem;
       padding: 1rem 1.25rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1rem;
       transition: border-color 0.2s;
     }
-    .role-card:hover { border-color: rgba(0,210,122,0.2); }
+    .role-card:hover { border-color: rgba(46,158,82,0.2); }
     .role-icon {
       width: 42px; height: 42px; border-radius: 0.875rem;
-      background: rgba(0,210,122,0.1);
-      border: 1px solid rgba(0,210,122,0.2);
+      background: rgba(46,158,82,0.1);
+      border: 1px solid rgba(46,158,82,0.2);
       display: flex; align-items: center; justify-content: center;
       font-size: 1.15rem; flex-shrink: 0;
     }
     .role-name { font-size: 0.9rem; font-weight: 700; }
-    .role-desc { font-size: 0.775rem; color: rgba(224,240,234,0.45); margin-top: 0.1rem; }
+    .role-desc { font-size: 0.775rem; color: rgba(22,33,27,0.75); margin-top: 0.1rem; }
 
     .side-footer {
-      font-size: 0.775rem; color: rgba(224,240,234,0.3);
+      font-size: 0.775rem; color: rgba(22,33,27,0.6);
       position: relative; z-index: 1;
     }
 
@@ -106,57 +106,57 @@
 
     .lb-back {
       display: inline-flex; align-items: center; gap: 0.4rem;
-      color: rgba(224,240,234,0.4); font-size: 0.82rem;
+      color: rgba(22,33,27,0.7); font-size: 0.82rem;
       margin-bottom: 2rem; cursor: pointer;
       transition: color 0.2s;
     }
-    .lb-back:hover { color: #E0F0EA; }
+    .lb-back:hover { color: #16211B; }
 
     .lb-eyebrow {
       font-size: 0.72rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.14em;
-      color: #00D27A; margin-bottom: 0.75rem;
+      color: #2E9E52; margin-bottom: 0.75rem;
     }
     .lb-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.4rem; }
-    .lb-sub   { color: rgba(224,240,234,0.5); font-size: 0.9rem; margin-bottom: 2.25rem; }
+    .lb-sub   { color: rgba(22,33,27,0.8); font-size: 0.9rem; margin-bottom: 2.25rem; }
 
     .form-field { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.1rem; }
     .fl-label {
       font-size: 0.775rem; font-weight: 600;
-      color: rgba(224,240,234,0.6);
+      color: rgba(22,33,27,0.85);
       text-transform: uppercase; letter-spacing: 0.08em;
     }
     .fl-input {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 0.875rem;
       padding: 0.875rem 1.1rem;
-      color: #E0F0EA; font-size: 0.95rem;
-      font-family: 'Inter', sans-serif;
+      color: #16211B; font-size: 0.95rem;
+      font-family: 'Public Sans', sans-serif;
       transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
       outline: none; width: 100%;
     }
-    .fl-input::placeholder { color: rgba(224,240,234,0.25); }
+    .fl-input::placeholder { color: rgba(22,33,27,0.55); }
     .fl-input:focus {
-      border-color: #00D27A;
-      box-shadow: 0 0 0 3px rgba(0,210,122,0.12);
-      background: rgba(0,210,122,0.04);
+      border-color: #2E9E52;
+      box-shadow: 0 0 0 3px rgba(46,158,82,0.12);
+      background: rgba(46,158,82,0.04);
     }
-    .fl-input.error { border-color: #EF4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+    .fl-input.error { border-color: #CF2E2E; box-shadow: 0 0 0 3px rgba(207,46,46,0.1); }
 
     .btn-submit {
       width: 100%; padding: 0.95rem;
-      background: #00D27A; color: #030B0D;
+      background: #2E9E52; color: #FFFFFF;
       border: none; border-radius: 0.875rem;
       font-size: 0.95rem; font-weight: 800;
       cursor: pointer; margin-top: 0.25rem;
       transition: all 0.2s;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Public Sans', sans-serif;
     }
     .btn-submit:hover:not(:disabled) {
-      background: #00F090;
-      box-shadow: 0 4px 24px rgba(0,210,122,0.4);
+      background: #24803F;
+      box-shadow: 0 4px 24px rgba(46,158,82,0.4);
       transform: translateY(-1px);
     }
     .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
@@ -170,37 +170,37 @@
     }
     .login-alert.show { display: flex; }
     .login-alert.error {
-      background: rgba(239,68,68,0.08); color: #EF4444;
-      border-color: rgba(239,68,68,0.2);
+      background: rgba(207,46,46,0.08); color: #CF2E2E;
+      border-color: rgba(207,46,46,0.2);
     }
     .login-alert.success {
-      background: rgba(0,210,122,0.08); color: #00D27A;
-      border-color: rgba(0,210,122,0.2);
+      background: rgba(46,158,82,0.08); color: #2E9E52;
+      border-color: rgba(46,158,82,0.2);
     }
 
     .rate-info {
       display: flex; align-items: center; gap: 0.4rem;
-      font-size: 0.75rem; color: rgba(224,240,234,0.3);
+      font-size: 0.75rem; color: rgba(22,33,27,0.6);
       margin-top: 1.25rem; justify-content: center;
     }
-    .rate-dot { width: 6px; height: 6px; background: #00D27A; border-radius: 50%; opacity: 0.6; }
+    .rate-dot { width: 6px; height: 6px; background: #2E9E52; border-radius: 50%; opacity: 0.6; }
 
     .lb-footer {
       margin-top: 2rem; padding-top: 1.5rem;
-      border-top: 1px solid rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(22,45,33,0.14);
       text-align: center;
     }
     .lb-footer a {
-      color: #00D27A; font-size: 0.875rem; font-weight: 600;
+      color: #2E9E52; font-size: 0.875rem; font-weight: 600;
       display: inline-flex; align-items: center; gap: 0.4rem;
       transition: color 0.2s;
     }
-    .lb-footer a:hover { color: #00F090; }
+    .lb-footer a:hover { color: #24803F; }
 
     .spinner {
       width: 18px; height: 18px;
-      border: 2px solid rgba(3,11,13,0.3);
-      border-top-color: #030B0D;
+      border: 2px solid rgba(214,234,219,0.3);
+      border-top-color: #FFFFFF;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
@@ -210,6 +210,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
   </style>
+  <link rel="stylesheet" href="gov-theme.css">
 </head>
 <body>
   <div class="login-shell">

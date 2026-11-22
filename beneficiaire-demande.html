@@ -7,7 +7,7 @@
   <meta name="description" content="Soumettez votre demande d'intrants agricoles et suivez son statut en temps réel.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     body { padding: 0; }
@@ -15,27 +15,27 @@
     /* ── Header ── */
     .pub-header {
       position: sticky; top: 0; z-index: 50;
-      background: rgba(3,11,13,0.85);
+      background: rgba(214,234,219,0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(22,45,33,0.14);
       padding: 0 1.5rem;
       display: flex; align-items: center; justify-content: space-between;
       height: 62px;
     }
     .pub-brand { display: flex; align-items: center; gap: 0.75rem; }
-    .pub-brand img { height: 28px; filter: drop-shadow(0 0 6px rgba(0,210,122,0.4)); }
+    .pub-brand img { height: 28px; filter: drop-shadow(0 0 6px rgba(46,158,82,0.4)); }
     .pub-brand-name { font-weight: 800; font-size: 1rem; }
-    .pub-brand-tag  { font-size: 0.7rem; color: rgba(224,240,234,0.4); }
+    .pub-brand-tag  { font-size: 0.7rem; color: rgba(22,33,27,0.7); }
     .pub-back {
       display: inline-flex; align-items: center; gap: 0.5rem;
-      color: rgba(224,240,234,0.5); font-size: 0.82rem; font-weight: 500;
+      color: rgba(22,33,27,0.8); font-size: 0.82rem; font-weight: 500;
       padding: 0.45rem 1rem; border-radius: 0.625rem;
-      border: 1px solid rgba(255,255,255,0.07);
-      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(22,45,33,0.14);
+      background: rgba(255,255,255,0.85);
       cursor: pointer; transition: all 0.2s;
     }
-    .pub-back:hover { color: #E0F0EA; border-color: rgba(255,255,255,0.12); }
+    .pub-back:hover { color: #16211B; border-color: rgba(22,45,33,0.18); }
 
     /* ── Content ── */
     .pub-wrap {
@@ -46,20 +46,20 @@
     .pub-hero { text-align: center; margin-bottom: 3rem; }
     .pub-eyebrow {
       display: inline-flex; align-items: center; gap: 0.5rem;
-      background: rgba(0,210,122,0.1); border: 1px solid rgba(0,210,122,0.2);
-      color: #00D27A; border-radius: 999px;
+      background: rgba(46,158,82,0.1); border: 1px solid rgba(46,158,82,0.2);
+      color: #2E9E52; border-radius: 999px;
       padding: 0.3rem 0.9rem; font-size: 0.72rem; font-weight: 700;
       letter-spacing: 0.1em; text-transform: uppercase;
       margin-bottom: 1.25rem;
     }
     .pub-hero h1 { font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.6rem; }
-    .pub-hero p  { color: rgba(224,240,234,0.55); font-size: 0.95rem; line-height: 1.7; }
+    .pub-hero p  { color: rgba(22,33,27,0.85); font-size: 0.95rem; line-height: 1.7; }
 
     /* ── Tabs ── */
     .pub-tabs {
       display: flex; gap: 4px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1rem; padding: 4px;
       margin-bottom: 2rem;
     }
@@ -67,22 +67,22 @@
       flex: 1; padding: 0.65rem 1rem;
       border-radius: calc(1rem - 4px);
       font-size: 0.875rem; font-weight: 600;
-      color: rgba(224,240,234,0.5); background: transparent;
+      color: rgba(22,33,27,0.8); background: transparent;
       border: none; cursor: pointer;
-      transition: all 0.2s; font-family: 'Inter', sans-serif;
+      transition: all 0.2s; font-family: 'Public Sans', sans-serif;
       display: flex; align-items: center; justify-content: center; gap: 0.4rem;
     }
     .pub-tab.active {
-      background: rgba(0,210,122,0.12);
-      color: #00D27A;
-      border: 1px solid rgba(0,210,122,0.2);
+      background: rgba(46,158,82,0.12);
+      color: #2E9E52;
+      border: 1px solid rgba(46,158,82,0.2);
     }
-    .pub-tab:hover:not(.active) { color: #E0F0EA; }
+    .pub-tab:hover:not(.active) { color: #16211B; }
 
     /* ── Card ── */
     .pub-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1.5rem;
       padding: 2.25rem;
       backdrop-filter: blur(16px);
@@ -96,7 +96,7 @@
     }
     .pub-card-icon {
       width: 34px; height: 34px; border-radius: 0.625rem;
-      background: rgba(0,210,122,0.1);
+      background: rgba(46,158,82,0.1);
       display: flex; align-items: center; justify-content: center;
       font-size: 0.9rem;
     }
@@ -107,54 +107,54 @@
     .form-g { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
     .f-label {
       font-size: 0.775rem; font-weight: 600;
-      color: rgba(224,240,234,0.6);
+      color: rgba(22,33,27,0.85);
       text-transform: uppercase; letter-spacing: 0.08em;
     }
-    .f-label .req { color: #00D27A; }
+    .f-label .req { color: #2E9E52; }
     .f-input, .f-select, .f-textarea {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 0.875rem;
       padding: 0.8rem 1rem;
-      color: #E0F0EA; font-size: 0.9rem;
-      font-family: 'Inter', sans-serif;
+      color: #16211B; font-size: 0.9rem;
+      font-family: 'Public Sans', sans-serif;
       outline: none; width: 100%;
       transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
     }
-    .f-input::placeholder, .f-textarea::placeholder { color: rgba(224,240,234,0.2); }
+    .f-input::placeholder, .f-textarea::placeholder { color: rgba(22,33,27,0.5); }
     .f-input:focus, .f-select:focus, .f-textarea:focus {
-      border-color: #00D27A;
-      box-shadow: 0 0 0 3px rgba(0,210,122,0.1);
-      background: rgba(0,210,122,0.03);
+      border-color: #2E9E52;
+      box-shadow: 0 0 0 3px rgba(46,158,82,0.1);
+      background: rgba(46,158,82,0.03);
     }
     .f-input:disabled, .f-select:disabled {
       opacity: 0.45; cursor: not-allowed;
     }
-    .f-select option { background: #071318; color: #E0F0EA; }
+    .f-select option { background: #FFFFFF; color: #16211B; }
     .f-textarea { resize: vertical; min-height: 90px; }
-    .f-hint { font-size: 0.775rem; color: rgba(224,240,234,0.35); margin-top: 0.25rem; }
-    .f-hint.ok  { color: #00D27A; }
-    .f-hint.err { color: #EF4444; }
+    .f-hint { font-size: 0.775rem; color: rgba(22,33,27,0.65); margin-top: 0.25rem; }
+    .f-hint.ok  { color: #2E9E52; }
+    .f-hint.err { color: #CF2E2E; }
 
     .form-divider {
-      height: 1px; background: rgba(255,255,255,0.05);
+      height: 1px; background: rgba(22,45,33,0.14);
       margin: 1.5rem 0;
     }
 
     .btn-submit-pub {
       width: 100%; padding: 1rem;
-      background: #00D27A; color: #030B0D;
+      background: #2E9E52; color: #FFFFFF;
       border: none; border-radius: 0.875rem;
       font-size: 0.95rem; font-weight: 800;
       cursor: pointer; margin-top: 0.5rem;
       transition: all 0.2s;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Public Sans', sans-serif;
     }
     .btn-submit-pub:hover:not(:disabled) {
-      background: #00F090;
+      background: #24803F;
       transform: translateY(-2px);
-      box-shadow: 0 6px 28px rgba(0,210,122,0.4);
+      box-shadow: 0 6px 28px rgba(46,158,82,0.4);
     }
     .btn-submit-pub:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
@@ -165,8 +165,8 @@
       margin-top: 1rem; border: 1px solid;
     }
     .form-alert.show { display: flex; animation: slideIn 0.3s ease; }
-    .form-alert.success { background: rgba(0,210,122,0.08); color: #00D27A; border-color: rgba(0,210,122,0.2); }
-    .form-alert.error   { background: rgba(239,68,68,0.08);  color: #EF4444; border-color: rgba(239,68,68,0.2);  }
+    .form-alert.success { background: rgba(46,158,82,0.08); color: #2E9E52; border-color: rgba(46,158,82,0.2); }
+    .form-alert.error   { background: rgba(207,46,46,0.08);  color: #CF2E2E; border-color: rgba(207,46,46,0.2);  }
 
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(-6px); }
@@ -175,20 +175,20 @@
 
     /* ── Demand History ── */
     .demand-card {
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(22,45,33,0.14);
       border-radius: 1.25rem; padding: 1.5rem;
       margin-bottom: 1rem;
       transition: border-color 0.2s, transform 0.2s;
     }
-    .demand-card:hover { border-color: rgba(0,210,122,0.15); transform: translateX(2px); }
+    .demand-card:hover { border-color: rgba(46,158,82,0.15); transform: translateX(2px); }
     .demand-top {
       display: flex; align-items: flex-start;
       justify-content: space-between; gap: 1rem;
       margin-bottom: 1rem;
     }
     .demand-product { font-weight: 700; font-size: 1rem; }
-    .demand-date    { font-size: 0.78rem; color: rgba(224,240,234,0.4); margin-top: 0.2rem; }
+    .demand-date    { font-size: 0.78rem; color: rgba(22,33,27,0.7); margin-top: 0.2rem; }
 
     .status-badge {
       display: inline-flex; align-items: center; gap: 0.3rem;
@@ -198,35 +198,36 @@
       flex-shrink: 0;
     }
     .status-badge::before { content: '●'; font-size: 0.5rem; }
-    .status-en_attente { background: rgba(245,166,35,0.12); color: #F5A623; border: 1px solid rgba(245,166,35,0.25); }
-    .status-validee    { background: rgba(0,210,122,0.12);  color: #00D27A; border: 1px solid rgba(0,210,122,0.25);  }
-    .status-rejetee    { background: rgba(239,68,68,0.12);  color: #EF4444; border: 1px solid rgba(239,68,68,0.25);  }
+    .status-en_attente { background: rgba(168,90,44,0.12); color: #A85A2C; border: 1px solid rgba(168,90,44,0.25); }
+    .status-validee    { background: rgba(46,158,82,0.12);  color: #2E9E52; border: 1px solid rgba(46,158,82,0.25);  }
+    .status-rejetee    { background: rgba(207,46,46,0.12);  color: #CF2E2E; border: 1px solid rgba(207,46,46,0.25);  }
 
     .demand-meta {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 0.875rem; padding: 1rem;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.04);
+      background: rgba(22,45,33,0.04);
+      border: 1px solid rgba(255,255,255,0.85);
       border-radius: 0.875rem;
     }
-    .meta-field label { display: block; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(224,240,234,0.35); margin-bottom: 0.2rem; }
+    .meta-field label { display: block; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(22,33,27,0.65); margin-bottom: 0.2rem; }
     .meta-field span  { font-size: 0.875rem; font-weight: 500; }
 
     .empty-box {
       text-align: center; padding: 3.5rem 1.5rem;
-      color: rgba(224,240,234,0.3);
+      color: rgba(22,33,27,0.6);
     }
     .empty-box-icon { font-size: 3rem; display: block; margin-bottom: 0.875rem; opacity: 0.4; }
 
-    .spinner { width: 18px; height: 18px; border: 2px solid rgba(3,11,13,0.3); border-top-color: #030B0D; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(214,234,219,0.3); border-top-color: #FFFFFF; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* aurora in bg */
     .aurora { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-    .aurora::before { content: ''; position: absolute; width: 80vw; height: 80vw; top: -30vw; left: -20vw; background: radial-gradient(circle, rgba(0,210,122,0.05) 0%, transparent 65%); animation: drift 20s ease-in-out infinite alternate; }
-    .aurora::after  { content: ''; position: absolute; width: 50vw; height: 50vw; bottom: -5vw; right: -10vw; background: radial-gradient(circle, rgba(0,130,80,0.04) 0%, transparent 65%); animation: drift 26s ease-in-out infinite alternate-reverse; }
+    .aurora::before { content: ''; position: absolute; width: 80vw; height: 80vw; top: -30vw; left: -20vw; background: radial-gradient(circle, rgba(46,158,82,0.05) 0%, transparent 65%); animation: drift 20s ease-in-out infinite alternate; }
+    .aurora::after  { content: ''; position: absolute; width: 50vw; height: 50vw; bottom: -5vw; right: -10vw; background: radial-gradient(circle, rgba(46,158,82,0.04) 0%, transparent 65%); animation: drift 26s ease-in-out infinite alternate-reverse; }
     @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(4vw,6vw) scale(1.12); } }
   </style>
+  <link rel="stylesheet" href="gov-theme.css">
 </head>
 <body>
   <div class="aurora"></div>
@@ -381,7 +382,7 @@
           <label class="f-label" for="search-contact">Votre numéro de téléphone</label>
           <div style="display:flex; gap:0.75rem;">
             <input class="f-input" type="tel" id="search-contact" placeholder="771234567" style="flex:1;">
-            <button onclick="searchDemandes()" style="background:#00D27A; color:#030B0D; border:none; border-radius:0.875rem; padding:0 1.5rem; font-weight:700; font-size:0.875rem; cursor:pointer; font-family:'Inter',sans-serif; white-space:nowrap; transition:all 0.2s;" onmouseover="this.style.background='#00F090'" onmouseout="this.style.background='#00D27A'">
+            <button onclick="searchDemandes()" style="background:#2E9E52; color:#FFFFFF; border:none; border-radius:0.875rem; padding:0 1.5rem; font-weight:700; font-size:0.875rem; cursor:pointer; font-family:'Public Sans',sans-serif; white-space:nowrap; transition:all 0.2s;" onmouseover="this.style.background='#24803F'" onmouseout="this.style.background='#2E9E52'">
               Rechercher
             </button>
           </div>
