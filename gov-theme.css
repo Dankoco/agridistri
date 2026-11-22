@@ -1,4 +1,4 @@
-/* AgriDistri - thème institutionnel
+﻿/* AgriDistri - thème institutionnel
    Palette et structure inspirées des sites de l'administration sénégalaise :
    fond vert pâle, bandeau vert sombre, vert vif, ocre et mil, titres en Fraunces. */
 
@@ -171,11 +171,7 @@ section { padding: 4rem 1.5rem; }
 .public-header { background: #fff !important; border-bottom: 3px solid var(--vert) !important; }
 
 
-/* ── Logo (conçu pour fond sombre) : pastille vert sombre ── */
+/* ── Logo ── */
 .hero-logo { display: none !important; }
-.nav-brand img, .public-header-brand img, .sidebar-brand img {
-  background: var(--vert-990);
-  padding: 4px 10px;
-  border-radius: var(--r-sm);
-  box-sizing: content-box;
-}
+.nav-brand img, .public-header-brand img, .sidebar-brand img, .footer-brand img { border-radius: 8px; filter: none !important; }
+.nav-brand img { height: 38px; }
